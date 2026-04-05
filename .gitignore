@@ -8,10 +8,10 @@
 .env
 *.log
 
-# Ignore build outputs and dependencies
+# Build outputs
 node_modules/
-dist/
 .next/
+dist/
 out/
 build/
 
