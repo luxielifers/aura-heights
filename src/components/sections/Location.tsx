@@ -1,93 +1,187 @@
 "use client";
 
-import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+import { motion, useInView, animate } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+
+const AuraMap = dynamic(() => import("@/components/AuraMap"), {
+  ssr: false,
+  loading: () => <div className="absolute inset-0 bg-bg" />,
+});
 
 const highlights = [
-  { name: "Max Super Speciality Hospital", distance: "5 Min" },
-  { name: "Pacific Mall", distance: "10 Min" },
-  { name: "Doon School", distance: "15 Min" },
-  { name: "Jolly Grant Airport", distance: "45 Min" },
-  { name: "Mussoorie", distance: "60 Min" },
+  { name: "Max Super Speciality Hospital", distance: 5, unit: "Min" },
+  { name: "Pacific Mall", distance: 10, unit: "Min" },
+  { name: "Doon School", distance: 15, unit: "Min" },
+  { name: "Jolly Grant Airport", distance: 45, unit: "Min" },
+  { name: "Mussoorie", distance: 60, unit: "Min" },
 ];
 
-export default function Location() {
-  return (
-    <section id="location" className="py-24 md:py-32 bg-bg/60 backdrop-blur-3xl relative z-20 border-t border-marble/30">
-      <div className="container mx-auto px-6 md:px-12">
-        
-        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-center">
-          
-          {/* Left: Map */}
-          <div className="w-full lg:w-1/2">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 1 }}
-              className="relative w-full aspect-square md:aspect-[4/3] bg-marble overflow-hidden group"
-            >
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d110204.66191720875!2d77.94709405469446!3d30.325550881954316!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390929c356c888af%3A0x4c3562c032518799!2sDehradun%2C%20Uttarakhand!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
-                width="100%" 
-                height="100%" 
-                style={{ border: 0, filter: 'grayscale(30%)' }} 
-                allowFullScreen={false} 
-                loading="lazy" 
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Aura Heights Location"
-              ></iframe>
-              
-              {/* Interactive Overlay linking to proper URL */}
-              <a 
-                href="https://maps.app.goo.gl/5x5LdfC88WhJtFwK6"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute inset-0 z-10 bg-black/0 group-hover:bg-black/30 transition-colors duration-500 flex items-center justify-center cursor-pointer"
-              >
-                <div className="font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-bronze bg-bronze text-white px-8 py-3.5 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-500 scale-90 group-hover:scale-100 flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(184,137,42,0.4)]">
-                  Open in Maps
-                </div>
-              </a>
-            </motion.div>
-          </div>
+function CountUpNumber({
+  value,
+  inView,
+  delay = 0,
+}: {
+  value: number;
+  inView: boolean;
+  delay?: number;
+}) {
+  const [display, setDisplay] = useState(0);
 
-          {/* Right: Highlights Content */}
-          <div className="w-full lg:w-1/2">
-            <div className="mb-6 font-josefin tracking-[0.25em] text-xs uppercase" style={{ color: "var(--color-bronze)" }}>
-              <div className="w-12 h-[1px] bg-bronze mb-4"></div>
-              Location & Neighbourhood
+  useEffect(() => {
+    if (!inView) return;
+    let stopFn: (() => void) | undefined;
+    const timeout = setTimeout(() => {
+      const controls = animate(0, value, {
+        duration: 1.4,
+        ease: "easeOut",
+        onUpdate(v) {
+          setDisplay(Math.round(v));
+        },
+      });
+      stopFn = () => controls.stop();
+    }, delay * 1000);
+
+    return () => {
+      clearTimeout(timeout);
+      stopFn?.();
+    };
+  }, [inView, value, delay]);
+
+  return <>{display}</>;
+}
+
+export default function Location() {
+  const listRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(listRef, { once: true, margin: "-80px" });
+
+  return (
+    <section
+      id="location"
+      className="relative overflow-hidden border-t border-marble/30"
+      style={{ minHeight: "720px" }}
+    >
+      {/* ── Full-bleed map background ── */}
+      <div className="absolute inset-0 z-0">
+        <AuraMap />
+      </div>
+
+      {/* Top fade into section background */}
+      <div
+        className="absolute top-0 inset-x-0 pointer-events-none z-10"
+        style={{
+          height: "28%",
+          background: "linear-gradient(to bottom, var(--bg) 0%, transparent 100%)",
+        }}
+      />
+      {/* Bottom fade */}
+      <div
+        className="absolute bottom-0 inset-x-0 pointer-events-none z-10"
+        style={{
+          height: "28%",
+          background: "linear-gradient(to top, var(--bg) 0%, transparent 100%)",
+        }}
+      />
+      {/* Left fade */}
+      <div
+        className="absolute left-0 top-0 bottom-0 pointer-events-none z-10"
+        style={{
+          width: "12%",
+          background: "linear-gradient(to right, var(--bg) 0%, transparent 100%)",
+        }}
+      />
+      {/* Right fade */}
+      <div
+        className="absolute right-0 top-0 bottom-0 pointer-events-none z-10"
+        style={{
+          width: "12%",
+          background: "linear-gradient(to left, var(--bg) 0%, transparent 100%)",
+        }}
+      />
+
+      {/* ── Content layer ── */}
+      <div className="relative z-20 container mx-auto px-6 md:px-12 py-24 md:py-32 h-full flex items-center">
+        <div className="flex justify-end w-full">
+
+          {/* Glassmorphism content card — right side */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.9 }}
+            className="w-full lg:w-5/12 rounded-[2.5rem] px-8 py-10 md:px-12 md:py-12"
+            style={{
+              background: "rgba(250, 247, 242, 0.60)",
+              backdropFilter: "blur(28px)",
+              WebkitBackdropFilter: "blur(28px)",
+              border: "1px solid rgba(184, 137, 42, 0.18)",
+              boxShadow:
+                "0 8px 40px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.65)",
+            }}
+          >
+            {/* Section label */}
+            <div
+              className="mb-6 font-josefin tracking-[0.25em] text-xs uppercase"
+              style={{ color: "var(--color-bronze)" }}
+            >
+              <div className="w-12 h-[1px] bg-bronze mb-4" />
+              Location &amp; Neighbourhood
             </div>
-            
-            <h2 className="font-cormorant text-4xl md:text-5xl lg:text-6xl text-primary leading-tight mb-12">
+
+            {/* Heading */}
+            <h2 className="font-cormorant text-4xl md:text-5xl text-primary leading-tight mb-10">
               Connected to the <br />
               <span className="italic text-bronze-light">Heart of Dehradun</span>
             </h2>
 
-            <div className="relative">
-              {/* Vertical line connecting elements */}
-              <div className="absolute left-[3px] top-[10px] bottom-[10px] w-px bg-marble"></div>
-              
-              <ul className="space-y-8 relative">
-                {highlights.map((item, idx) => (
-                  <motion.li 
-                    key={idx}
-                    initial={{ opacity: 0, x: -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.6, delay: idx * 0.1, ease: "easeOut" }}
-                    className="flex justify-between items-center pl-8"
-                  >
-                    <span className="absolute left-[0px] w-2 h-2 rounded-full bg-bronze transform -translate-x-[0.5px]"></span>
-                    <span className="font-tenor text-lg text-primary">{item.name}</span>
-                    <span className="font-josefin uppercase text-xs tracking-widest text-muted whitespace-nowrap">{item.distance}</span>
-                  </motion.li>
-                ))}
+            {/* Highlights list */}
+            <div ref={listRef} className="relative">
+              <div className="absolute left-[3px] top-[10px] bottom-[10px] w-px bg-bronze/25" />
+
+              <ul className="space-y-7 relative">
+                {highlights.map((item, idx) => {
+                  const slideDelay = idx * 0.12;
+                  const countDelay = 0.65 + slideDelay;
+
+                  return (
+                    <motion.li
+                      key={idx}
+                      initial={{ opacity: 0, x: -24 }}
+                      animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -24 }}
+                      transition={{
+                        duration: 0.65,
+                        delay: slideDelay,
+                        ease: [0.25, 0.46, 0.45, 0.94],
+                      }}
+                      className="flex justify-between items-center pl-8 relative"
+                    >
+                      <span className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-bronze shadow-[0_0_6px_rgba(184,137,42,0.5)]" />
+
+                      <span className="font-tenor text-base md:text-lg text-primary">
+                        {item.name}
+                      </span>
+
+                      <span
+                        className="font-josefin uppercase text-[10px] tracking-widest whitespace-nowrap tabular-nums px-3 py-1 rounded-full"
+                        style={{
+                          color: "var(--color-bronze)",
+                          background: "rgba(184,137,42,0.10)",
+                          border: "1px solid rgba(184,137,42,0.20)",
+                          minWidth: "5rem",
+                          textAlign: "center",
+                        }}
+                      >
+                        <CountUpNumber value={item.distance} inView={inView} delay={countDelay} />{" "}
+                        {item.unit}
+                      </span>
+                    </motion.li>
+                  );
+                })}
               </ul>
             </div>
-          </div>
+          </motion.div>
 
         </div>
-
       </div>
     </section>
   );

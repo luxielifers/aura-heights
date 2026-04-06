@@ -4,8 +4,15 @@
 *.avi
 *.webm
 
-# Ignore environment variables and logs
+# Ignore environment variables
 .env
+.env.local
+.env*.local
+
+# Internal docs / planning files — never commit these
+*.md
+
+# Logs
 *.log
 
 # Build outputs
