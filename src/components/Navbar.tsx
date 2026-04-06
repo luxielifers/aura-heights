@@ -138,7 +138,10 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
             </motion.a>
 
             <button 
-              className="lg:hidden text-primary"
+              className={cn(
+                "lg:hidden transition-colors duration-300",
+                scrolled || mobileMenuOpen ? "text-primary" : "text-[#FAF7F2]"
+              )}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}

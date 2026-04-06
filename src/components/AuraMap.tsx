@@ -16,14 +16,72 @@ export default function AuraMap() {
         title="Aura Heights Custom Map"
         loading="lazy"
       />
-      {/* Click overlay — opens Google Maps */}
-      <a
-        href={GOOGLE_MAPS_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="absolute inset-0 z-10 cursor-pointer"
-        aria-label="Open Aura Heights in Google Maps"
-      />
+
+      {/* Gold pin — bottom of wrapper anchors to map center (Aura Heights coords) */}
+      <div
+        className="absolute z-[5] pointer-events-none"
+        style={{
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -100%)",
+        }}
+      >
+        <div className="flex items-start gap-3">
+
+          {/* Pin SVG — Google Maps teardrop shape */}
+          <svg
+            width="48"
+            height="62"
+            viewBox="0 0 44 58"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{
+              filter:
+                "drop-shadow(0px 8px 14px rgba(184,137,42,0.50)) drop-shadow(0px 2px 5px rgba(0,0,0,0.22))",
+            }}
+          >
+            {/* Teardrop body */}
+            <path
+              d="M22 0C9.85 0 0 9.85 0 22C0 37.5 22 58 22 58C22 58 44 37.5 44 22C44 9.85 34.15 0 22 0Z"
+              fill="#B8892A"
+            />
+            {/* Subtle inner highlight rim */}
+            <path
+              d="M22 2.5C11.5 2.5 2.5 11.5 2.5 22C2.5 36 22 54.5 22 54.5C22 54.5 41.5 36 41.5 22C41.5 11.5 32.5 2.5 22 2.5Z"
+              fill="#D4A84B"
+              opacity="0.30"
+            />
+            {/* White ring */}
+            <circle cx="22" cy="20.5" r="10" fill="#FAF7F2" />
+            {/* Gold centre dot */}
+            <circle cx="22" cy="20.5" r="4" fill="#B8892A" />
+          </svg>
+
+          {/* "Aura Heights" label badge */}
+          <div
+            style={{
+              marginTop: "14px",
+              background: "rgba(250, 247, 242, 0.94)",
+              backdropFilter: "blur(18px)",
+              WebkitBackdropFilter: "blur(18px)",
+              border: "1px solid rgba(184, 137, 42, 0.28)",
+              borderRadius: "30px",
+              padding: "8px 20px",
+              fontSize: "10px",
+              letterSpacing: "0.22em",
+              textTransform: "uppercase" as const,
+              fontFamily: "var(--font-josefin, 'Josefin Sans', sans-serif)",
+              color: "#1C1C1C",
+              whiteSpace: "nowrap" as const,
+              boxShadow:
+                "0 6px 28px rgba(0,0,0,0.10), 0 0 0 0.5px rgba(184,137,42,0.18)",
+            }}
+          >
+            Aura Heights
+          </div>
+        </div>
+      </div>
+
     </>
   );
 }

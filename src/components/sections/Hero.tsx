@@ -39,7 +39,7 @@ export default function Hero() {
             src="https://player.vimeo.com/video/1180217460?background=1&autoplay=1&muted=1&loop=1" 
             frameBorder="0" 
             allow="autoplay; fullscreen; picture-in-picture" 
-            className="absolute top-1/2 left-1/2 w-[177.77777778vh] min-w-full min-h-full h-[56.25vw] -translate-x-1/2 -translate-y-1/2 object-cover opacity-60"
+            className="absolute top-1/2 left-1/2 w-[177.77777778vh] min-w-full min-h-full h-[56.25vw] -translate-x-1/2 -translate-y-[58%] md:-translate-y-1/2 object-cover opacity-60"
             title="Aura Heights Master"
           ></iframe>
         </div>
