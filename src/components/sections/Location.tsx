@@ -137,7 +137,7 @@ export default function Location() {
       {/* ══ MOBILE LAYOUT ══
           Map sticks full-screen at top.
           Card slides up from below and sticks at 15vh — same pattern as Amenities/Gallery. */}
-      <div className="md:hidden" style={{ minHeight: "250vh" }}>
+      <div className="md:hidden" style={{ minHeight: "170vh" }}>
 
         {/* Map: sticky, full viewport height */}
         <div

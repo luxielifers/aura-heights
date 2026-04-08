@@ -49,16 +49,28 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom scrollbar */
+/* ── Custom Gold Scrollbar ── */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 5px;
+  background: none;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg);
+  background: none;
+  box-shadow: none;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--marble);
+  background: var(--bronze);
+  border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--bronze);
+  background: var(--bronze-light);
+}
+::-webkit-scrollbar-corner {
+  background: none;
+}
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bronze) transparent;
 }

@@ -16,7 +16,17 @@ export default function Contact() {
     <section id="contact" className="py-24 md:py-32 bg-bg-secondary/80 backdrop-blur-3xl relative z-20">
       <div className="container mx-auto px-6 md:px-12">
         
-        <div className="mb-16 md:mb-24 flex flex-col items-center justify-center text-center">
+        {/* Heading glass card */}
+        <div
+          className="mb-10 max-w-3xl mx-auto rounded-[2rem] px-10 py-10 md:px-16 md:py-14 flex flex-col items-center justify-center text-center"
+          style={{
+            background: "rgba(250,247,242,0.55)",
+            backdropFilter: "blur(32px)",
+            WebkitBackdropFilter: "blur(32px)",
+            border: "1px solid rgba(184,137,42,0.18)",
+            boxShadow: "0 12px 60px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.7)",
+          }}
+        >
           <div className="mb-6 font-josefin tracking-[0.25em] text-xs uppercase" style={{ color: "var(--color-bronze)" }}>
             <div className="w-12 h-[1px] bg-bronze mx-auto mb-4"></div>
             Private Viewing
@@ -26,7 +36,18 @@ export default function Contact() {
           </h2>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-16 max-w-6xl mx-auto">
+        {/* Glassmorphism content plate */}
+        <div
+          className="max-w-6xl mx-auto rounded-[2.5rem] px-8 py-12 md:px-14 md:py-16"
+          style={{
+            background: "rgba(250,247,242,0.55)",
+            backdropFilter: "blur(32px)",
+            WebkitBackdropFilter: "blur(32px)",
+            border: "1px solid rgba(184,137,42,0.18)",
+            boxShadow: "0 12px 60px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7)",
+          }}
+        >
+        <div className="flex flex-col lg:flex-row gap-16">
           
           {/* Left: Form */}
           <div className="w-full lg:w-2/3">
@@ -129,7 +150,7 @@ export default function Contact() {
           </div>
 
           {/* Right: Direct Contact */}
-          <div className="w-full lg:w-1/3 flex flex-col justify-center gap-12 lg:pl-12 lg:border-l border-marble">
+          <div className="w-full lg:w-1/3 flex flex-col justify-center gap-12 lg:pl-12 lg:border-l border-marble/50">
             
             <motion.div 
               initial={{ opacity: 0, x: 20 }}
@@ -166,6 +187,7 @@ export default function Contact() {
           </div>
 
         </div>
+        </div>{/* end glass plate */}
       </div>
     </section>
   );
