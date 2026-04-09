@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Link from "next/link";
 
 export default function Hero() {
   const bgRef = useRef<HTMLDivElement>(null);
@@ -39,7 +38,7 @@ export default function Hero() {
             src="https://player.vimeo.com/video/1180217460?background=1&autoplay=1&muted=1&loop=1" 
             frameBorder="0" 
             allow="autoplay; fullscreen; picture-in-picture" 
-            className="absolute top-1/2 left-1/2 w-[177.77777778vh] min-w-full min-h-full h-[56.25vw] -translate-x-1/2 -translate-y-[58%] md:-translate-y-1/2 object-cover opacity-60"
+            className="absolute top-1/2 left-1/2 w-[177.77777778vh] min-w-full min-h-full h-[56.25vw] -translate-x-1/2 -translate-y-[52%] md:-translate-y-1/2 object-cover opacity-60"
             title="Aura Heights Master"
           ></iframe>
         </div>
@@ -101,13 +100,14 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 4.5 }}
         >
-          <Link 
-            href="#residences"
+          <button
+            type="button"
+            onClick={() => document.getElementById("residences")?.scrollIntoView({ behavior: "smooth" })}
             className="inline-flex items-center font-josefin uppercase text-xs tracking-[0.2em] border border-bronze px-8 py-4 hover:bg-bronze hover:text-white transition-colors duration-300"
             style={{ color: "var(--color-bronze)" }}
           >
             <span className="group-hover:text-white">Explore Residences →</span>
-          </Link>
+          </button>
         </motion.div>
       </div>
     </section>

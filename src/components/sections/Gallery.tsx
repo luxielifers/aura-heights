@@ -6,15 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
-
-const galleryImages = [
-  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1000",
-  "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1000",
-  "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1000",
-  "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=1000",
-  "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=1000",
-  "https://images.unsplash.com/photo-1600585153490-76fb20a32601?auto=format&fit=crop&q=80&w=1000",
-];
+import { homeGalleryImages } from "@/lib/media";
 
 // How many degrees to skew (positive = leans right like the reference)
 const SKEW_DEG = 10;
@@ -50,14 +42,14 @@ export default function Gallery() {
   const handlePrev = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (lightboxIndex !== null) {
-      setLightboxIndex(lightboxIndex === 0 ? galleryImages.length - 1 : lightboxIndex - 1);
+      setLightboxIndex(lightboxIndex === 0 ? homeGalleryImages.length - 1 : lightboxIndex - 1);
     }
   };
 
   const handleNext = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (lightboxIndex !== null) {
-      setLightboxIndex(lightboxIndex === galleryImages.length - 1 ? 0 : lightboxIndex + 1);
+      setLightboxIndex(lightboxIndex === homeGalleryImages.length - 1 ? 0 : lightboxIndex + 1);
     }
   };
 
@@ -73,12 +65,20 @@ export default function Gallery() {
             <h2 className="font-cormorant text-4xl md:text-5xl text-primary leading-tight mb-8">
               Visualise <span className="italic text-bronze-light">Perfection</span>
             </h2>
-            <Link
-               href="/gallery"
-               className="inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-bronze bg-bg text-bronze px-12 py-4 hover:bg-bronze hover:text-white transition-shadow hover:shadow-[0_0_20px_rgba(184,137,42,0.4)]"
-            >
-               View Full Gallery
-            </Link>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                href="/gallery"
+                className="inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-bronze bg-bg text-bronze px-8 md:px-12 py-4 hover:bg-bronze hover:text-white transition-shadow hover:shadow-[0_0_20px_rgba(184,137,42,0.4)]"
+              >
+                View Full Gallery
+              </Link>
+              <Link
+                href="/gallery?tab=Layouts"
+                className="inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-marble bg-transparent text-primary px-8 md:px-12 py-4 hover:border-bronze hover:text-bronze transition-colors"
+              >
+                View Layouts
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -95,7 +95,7 @@ export default function Gallery() {
               gap: 36,
             }}
           >
-            {galleryImages.map((src, idx) => (
+            {homeGalleryImages.map((src, idx) => (
               <div
                 key={idx}
                 className="gallery-card relative flex-shrink-0 cursor-pointer group"
@@ -123,7 +123,6 @@ export default function Gallery() {
                     fill
                     sizes="320px"
                     className="object-cover"
-                    unoptimized
                   />
                   {/* Bronze shimmer on hover */}
                   <div className="absolute inset-0 bg-gradient-to-t from-bronze/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -133,41 +132,26 @@ export default function Gallery() {
           </div>
         </div>
 
-        {/* ── MOBILE: Sticky scroll cards (original layout preserved, parallelogram per card) ── */}
-        <div
-          className="md:hidden flex flex-col gap-6 px-4"
-          ref={scrollContainerRef}
-          style={{ position: "relative" }}
-        >
-          {galleryImages.slice(0, 3).map((src, idx) => (
-            <div
-              key={idx}
-              className="gallery-card relative cursor-pointer group sticky shadow-xl"
-              style={{
-                top: `${15 + idx * 2}vh`,
-                height: 280,
-                overflow: "hidden",
-                transform: `skewX(-${SKEW_DEG}deg)`,
-                borderRadius: 4,
-              }}
-              onClick={() => setLightboxIndex(idx)}
-            >
+        {/* ── MOBILE: Swipe gallery cards for cleaner touch ergonomics ── */}
+        <div className="md:hidden px-4">
+          <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2">
+            {homeGalleryImages.map((src, idx) => (
               <div
-                className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"
-                style={{ transform: `skewX(${SKEW_DEG}deg) scaleX(1.18)` }}
+                key={idx}
+                className="gallery-card relative snap-center shrink-0 w-[82vw] max-w-[360px] aspect-[4/5] cursor-pointer group overflow-hidden border border-bronze/20"
+                onClick={() => setLightboxIndex(idx)}
               >
                 <Image
                   src={src}
                   alt={`Aura Heights Gallery ${idx + 1}`}
                   fill
-                  sizes="100vw"
-                  className="object-cover"
-                  unoptimized
+                  sizes="(max-width: 768px) 82vw, 320px"
+                  className="object-cover transition-transform duration-700 group-active:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-bronze/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-bronze/35 via-transparent to-transparent" />
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
@@ -193,11 +177,10 @@ export default function Gallery() {
 
           <div className="relative w-full max-w-4xl aspect-[4/3] md:aspect-video" onClick={(e) => e.stopPropagation()}>
             <Image
-              src={galleryImages[lightboxIndex]}
+              src={homeGalleryImages[lightboxIndex]}
               alt="Aura Heights Detail"
               fill
               className="object-contain"
-              unoptimized
             />
           </div>
 

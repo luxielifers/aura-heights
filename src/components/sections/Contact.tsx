@@ -4,6 +4,11 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Phone, MessageCircle } from "lucide-react";
 
+const PHONE_DISPLAY = "+91 94123 68618";
+const PHONE_HREF = "tel:+919412368618";
+const WHATSAPP_NUMBER = "919412368618";
+const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I%27m%20interested%20in%20Aura%20Heights.`;
+
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
@@ -11,6 +16,13 @@ export default function Contact() {
     unit: "",
     message: "",
   });
+  const [submitNotice, setSubmitNotice] = useState("");
+  const [unitFocused, setUnitFocused] = useState(false);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmitNotice("Online form submissions will be enabled shortly. Please use Direct Call or WhatsApp.");
+  };
 
   return (
     <section id="contact" className="py-24 md:py-32 bg-bg-secondary/80 backdrop-blur-3xl relative z-20">
@@ -51,7 +63,7 @@ export default function Contact() {
           
           {/* Left: Form */}
           <div className="w-full lg:w-2/3">
-            <form action="#" method="POST" className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-8">
               {/* Honeypot */}
               <input type="text" name="_gotcha" style={{ display: "none" }} />
               
@@ -101,12 +113,15 @@ export default function Contact() {
                   name="unit"
                   value={formData.unit}
                   onChange={e => setFormData({...formData, unit: e.target.value})}
-                  className="w-full bg-transparent border-b border-marble py-4 font-tenor text-primary focus:outline-none focus:border-bronze transition-colors peer appearance-none"
+                  onFocus={() => setUnitFocused(true)}
+                  onBlur={() => setUnitFocused(false)}
+                  className="w-full bg-transparent border-b border-marble py-4 pr-9 font-tenor text-primary focus:outline-none focus:border-bronze transition-all duration-300 peer appearance-none"
                   required
                 >
                   <option value="" disabled hidden></option>
-                  <option value="2BHK">2BHK Luxury Series</option>
-                  <option value="3BHK">3BHK Premium Suite</option>
+                  <option value="2BHK">2BHK</option>
+                  <option value="3BHK">3BHK</option>
+                  <option value="3BHK+">3BHK+</option>
                   <option value="Undecided">Undecided</option>
                 </select>
                 <label 
@@ -117,8 +132,22 @@ export default function Contact() {
                 >
                   Unit of Interest
                 </label>
-                {/* Custom dropdown arrow */}
-                <div className="absolute right-0 top-6 pointer-events-none border-t-[5px] border-t-muted border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent"></div>
+                <motion.div
+                  className="absolute right-0 top-5 pointer-events-none"
+                  animate={{ rotate: unitFocused ? 180 : 0, y: unitFocused ? 2 : 0 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="text-muted" />
+                  </svg>
+                </motion.div>
+                <motion.div
+                  className="absolute left-0 right-0 -bottom-[1px] h-[1px] bg-bronze"
+                  initial={false}
+                  animate={{ scaleX: unitFocused ? 1 : 0 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  style={{ originX: 0 }}
+                />
               </div>
 
               <div className="relative group">
@@ -146,6 +175,10 @@ export default function Contact() {
               >
                 Submit Request
               </motion.button>
+
+              {submitNotice ? (
+                <p className="font-tenor text-sm text-muted">{submitNotice}</p>
+              ) : null}
             </form>
           </div>
 
@@ -163,8 +196,8 @@ export default function Contact() {
                 <h3 className="font-cormorant text-2xl text-primary">Direct Call</h3>
               </div>
               <p className="font-tenor text-muted mb-2">Speak to our sales director directly.</p>
-              <a href="tel:+910000000000" className="font-josefin text-lg tracking-widest text-primary hover:text-bronze transition-colors block">
-                +91 00000 00000
+              <a href={PHONE_HREF} className="font-josefin text-lg tracking-widest text-primary hover:text-bronze transition-colors block">
+                {PHONE_DISPLAY}
               </a>
             </motion.div>
 
@@ -179,7 +212,7 @@ export default function Contact() {
                 <h3 className="font-cormorant text-2xl text-primary">WhatsApp</h3>
               </div>
               <p className="font-tenor text-muted mb-2">Get brochure & floor plans instantly.</p>
-              <a href="https://wa.me/910000000000" target="_blank" rel="noopener noreferrer" className="font-josefin text-lg tracking-widest text-primary hover:text-bronze transition-colors block">
+              <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="font-josefin text-lg tracking-widest text-primary hover:text-bronze transition-colors block">
                 Message Us
               </a>
             </motion.div>

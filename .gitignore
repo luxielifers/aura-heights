@@ -21,6 +21,14 @@ node_modules/
 dist/
 out/
 build/
+coverage/
+
+# Tooling caches / deployment metadata
+.cache/
+.eslintcache
+*.tsbuildinfo
+.vercel/
+.turbo/
 
 # OS files
 .DS_Store

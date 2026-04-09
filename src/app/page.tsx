@@ -21,14 +21,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 let preloaderHasRun = false;
 
 export default function Home() {
-  const [isPreloading, setIsPreloading] = useState(true);
-
-  useEffect(() => {
-    // If preloader already played during this SPA session, skip it
-    if (preloaderHasRun) {
-      setIsPreloading(false);
-    }
-  }, []);
+  const [isPreloading, setIsPreloading] = useState(() => !preloaderHasRun);
 
   // Prevent scroll while preloading
   useEffect(() => {

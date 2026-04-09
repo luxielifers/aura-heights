@@ -36,11 +36,19 @@ export default function Footer() {
           </nav>
 
           <div className="flex flex-col md:flex-row items-center md:items-end gap-2 md:gap-8 font-tenor text-xs text-muted">
+            <p>RERA Reg. No. UKREP10250000683 | All images are for representational purposes only.</p>
             <p>© 2026 Aura Heights. All rights reserved.</p>
             <p className="flex items-center gap-1">
-              Designed & developed by 
-              <a href="https://luxiesites.com" target="_blank" rel="noopener noreferrer" className="hover:text-bronze transition-colors border-b border-transparent hover:border-bronze">
-                Luxie Sites
+              Website built by
+              <a
+                href="https://luxiesites.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-baseline leading-none transition-opacity hover:opacity-80"
+                aria-label="LuxieSites"
+              >
+                <span className="font-cormorant font-bold text-base text-black">Luxie</span>
+                <span className="font-cormorant font-bold italic text-base text-bronze-light">Sites</span>
               </a>
             </p>
           </div>

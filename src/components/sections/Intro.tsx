@@ -4,6 +4,13 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 
 export default function Intro() {
+  const launchDate = new Date("2025-10-01");
+  const possessionDate = new Date("2030-04-01");
+  const now = new Date();
+  const timelineTotal = possessionDate.getTime() - launchDate.getTime();
+  const elapsed = Math.min(Math.max(now.getTime() - launchDate.getTime(), 0), timelineTotal);
+  const progressPct = Math.round((elapsed / timelineTotal) * 100);
+
   return (
     <section id="about" className="py-24 md:py-32 bg-bg overflow-hidden">
       <div className="container mx-auto px-6 md:px-12">
@@ -30,11 +37,31 @@ export default function Intro() {
               {/* Extra content to lean into Dehradun elevation / mountain air */}
               <div className="space-y-6 font-tenor text-muted leading-relaxed text-lg">
                 <p>
-                  Perched amidst the serene foothills of Dehradun, Aura Heights redefines luxury living. Experience the tranquility of mountain air combined with unparalleled architectural elegance.
+                  Tucked into the prestigious Rajpur Road neighbourhood, Aura Heights brings together Dehradun&apos;s heritage character and contemporary residential calm.
                 </p>
                 <p>
-                  Every detail has been meticulously crafted—from breathtaking panoramic views to expansive living spaces designed to harmonise with their natural surroundings. This is not just a residence; it is a sanctuary elevated above the ordinary.
+                  Intelligent planning, wellness-inspired spaces, and future-ready features shape homes that are crafted for comfort and designed for delight.
                 </p>
+                <p>
+                  The project is structured as a single refined tower with 8 floors and 6 units per floor, balancing privacy with a strong community rhythm.
+                </p>
+              </div>
+
+              <div className="mt-10 p-5 border border-marble bg-bg-secondary">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="font-josefin text-[10px] uppercase tracking-[0.2em] text-muted">Project Timeline Progress</p>
+                  <p className="font-josefin text-[10px] uppercase tracking-[0.2em] text-bronze">{progressPct}%</p>
+                </div>
+                <div className="h-2 bg-marble/80 overflow-hidden">
+                  <div
+                    className="h-full bg-bronze transition-all duration-700"
+                    style={{ width: `${progressPct}%` }}
+                  />
+                </div>
+                <div className="mt-3 flex items-center justify-between font-josefin text-[10px] uppercase tracking-[0.16em] text-muted">
+                  <span>Launch: Oct 2025</span>
+                  <span>Possession: Apr 2030</span>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -48,16 +75,14 @@ export default function Intro() {
               transition={{ duration: 1.2, ease: "easeOut" }}
               className="relative w-full aspect-[3/4] md:aspect-[4/5] overflow-hidden shadow-2xl"
             >
-              {/* {PLACEHOLDER} Image for now - use fallback */}
               <div className="absolute inset-0 bg-marble">
                 {/* Fallback pattern until image is loaded */}
               </div>
               <Image
-                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1000"
+                src="/images/gallery/exterior/outsidegarden.jpg"
                 alt="Aura Heights Architecture"
                 fill
                 className="object-cover scale-105 hover:scale-100 transition-transform duration-[2s]"
-                unoptimized
               />
             </motion.div>
           </div>

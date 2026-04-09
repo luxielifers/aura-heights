@@ -3,16 +3,9 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Sun, Car, Wind, Bell, Shield, ArrowUp } from "lucide-react";
-
-const amenities = [
-  { icon: Sun, title: "Rooftop Terrace", desc: "Panoramic views of the valley from an exclusive elevated sanctuary." },
-  { icon: Bell, title: "Concierge Service", desc: "24/7 dedicated staff catering to your every requirement." },
-  { icon: Car, title: "Covered Parking", desc: "Secure, climate-controlled spaces for your premium vehicles." },
-  { icon: Wind, title: "Landscaped Garden", desc: "Lush, meticulously maintained flora native to the foothills." },
-  { icon: ArrowUp, title: "Elevators", desc: "High-speed, whisper-quiet transit direct to your floor." },
-  { icon: Shield, title: "24-Hour Security", desc: "Advanced surveillance ensuring absolute peace of mind." },
-];
+import Link from "next/link";
+import AmenityIcon from "@/components/AmenityIcon";
+import { featuredAmenities } from "@/lib/amenities";
 
 export default function Amenities() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -56,13 +49,13 @@ export default function Amenities() {
         </div>
 
         <div ref={containerRef} className="flex flex-col gap-6 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 relative">
-          {amenities.map((item, idx) => (
+          {featuredAmenities.map((item, idx) => (
             <div 
               key={idx} 
               className="sticky top-[15vh] md:static amenity-card bg-marble p-10 border border-marble hover:border-bronze transition-colors flex flex-col items-center text-center group shadow-xl md:shadow-none"
             >
               <div className="mb-6 p-4 rounded-full bg-bg border border-transparent group-hover:border-bronze transition-colors">
-                <item.icon size={48} strokeWidth={1} style={{ color: "var(--color-bronze)" }} />
+                <AmenityIcon icon={item.icon} className="w-12 h-12 text-black" />
               </div>
               <h3 className="font-cormorant text-2xl text-primary mb-4">{item.title}</h3>
               <p className="font-tenor text-muted leading-relaxed text-sm">
@@ -70,6 +63,15 @@ export default function Amenities() {
               </p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-12 md:mt-14 text-center">
+          <Link
+            href="/amenities"
+            className="inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-bronze bg-bg text-bronze px-12 py-4 hover:bg-bronze hover:text-white transition-shadow hover:shadow-[0_0_20px_rgba(184,137,42,0.4)]"
+          >
+            View All Amenities
+          </Link>
         </div>
 
       </div>

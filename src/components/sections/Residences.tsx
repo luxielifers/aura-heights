@@ -6,28 +6,43 @@ import Image from "next/image";
 
 const tabs = [
   {
-    id: "2bhk",
-    title: "2BHK Luxury Series",
-    sqft: "{PLACEHOLDER} 1,450",
+    id: "l1-r1",
+    label: "2BHK",
+    title: "Type L-1 / R-1 - 2 BHK",
+    sqft: "1913",
     features: [
-      "Expansive Living Spaces",
-      "Panoramic Valley Views",
-      "Designer Kitchen & Bath",
-      "Private Balcony",
+      "Smartly planned 2 BHK layout",
+      "Expansive balcony for valley-facing openness",
+      "High ceilings and cross-ventilation planning",
+      "Premium finishes with privacy-first zoning",
     ],
-    image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1000", // {PLACEHOLDER}
+    image: "/images/layouts/floorplan_2bhk_L.jpg",
   },
   {
-    id: "3bhk",
-    title: "3BHK Premium Suite",
-    sqft: "{PLACEHOLDER} 2,100",
+    id: "l3-r3",
+    label: "3BHK",
+    title: "Type L-3 / R-3 - 3 BHK",
+    sqft: "2570",
     features: [
-      "Dual Master Suites",
-      "Unobstructed Peak Views",
-      "Maid's Quarters & Utility",
-      "Wraparound Terrace",
+      "Large-format 3 BHK family planning",
+      "Dedicated utility and practical circulation",
+      "Balanced public-private room separation",
+      "Designed for natural light through major living zones",
     ],
-    image: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=1000", // {PLACEHOLDER}
+    image: "/images/layouts/floorplan_3bhk_L_vertical.jpg",
+  },
+  {
+    id: "l2-r2",
+    label: "3BHK+",
+    title: "Type L-2 / R-2 - 3 BHK",
+    sqft: "2596",
+    features: [
+      "Signature 3 BHK with enhanced room proportions",
+      "Comfort-led zoning with private retreat feel",
+      "Open-format living and dining sequence",
+      "Optimized layout for long-term family living",
+    ],
+    image: "/images/layouts/floorplan_3bhk_R.jpg",
   },
 ];
 
@@ -49,6 +64,9 @@ export default function Residences() {
           <h2 className="font-cormorant text-4xl md:text-5xl lg:text-6xl text-primary leading-tight">
             Curated <span className="italic text-bronze-light">Living Spaces</span>
           </h2>
+          <p className="mt-5 font-josefin text-[10px] md:text-xs uppercase tracking-[0.2em] text-muted">
+            6 units per floor · 8 floors total
+          </p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 mt-12 items-start max-w-6xl mx-auto">
@@ -67,7 +85,7 @@ export default function Residences() {
                       : "border-marble text-muted hover:border-bronze hover:text-bronze"
                   }`}
                 >
-                  {tab.id.toUpperCase()}
+                  {tab.label}
                 </button>
               ))}
             </div>
@@ -96,12 +114,13 @@ export default function Residences() {
                   ))}
                 </ul>
 
-                <a 
-                  href="#contact"
+                <button
+                  type="button"
+                  onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
                   className="font-josefin uppercase text-[10px] tracking-[0.2em] border-b border-bronze text-primary hover:text-bronze pb-1 transition-colors inline-block"
                 >
                   Enquire About This Unit → 
-                </a>
+                </button>
               </motion.div>
             </AnimatePresence>
           </div>
@@ -122,7 +141,6 @@ export default function Residences() {
                   alt={currentTab.title}
                   fill
                   className="object-cover"
-                  unoptimized
                 />
               </motion.div>
             </AnimatePresence>
