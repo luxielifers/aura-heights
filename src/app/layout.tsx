@@ -24,10 +24,17 @@ export const metadata: Metadata = {
   title: "Aura Heights | Luxury Residences",
   description: "Where Elevation Meets Elegance. Premium digital showroom for Aura Heights.",
   icons: {
-    icon: "/images/faviconlogo.png",
-    shortcut: "/images/faviconlogo.png",
-    apple: "/images/faviconlogo.png",
+    icon: [
+      { url: "/favicon-for-app/favicon.ico" },
+      { url: "/favicon-for-app/icon1.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon-for-app/icon0.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon-for-app/favicon.ico",
+    apple: [
+      { url: "/favicon-for-app/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
+  manifest: "/favicon-for-app/manifest.json",
 };
 
 export default function RootLayout({

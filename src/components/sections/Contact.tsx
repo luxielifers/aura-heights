@@ -9,6 +9,7 @@ const PHONE_HREF = "tel:+919412368618";
 const WHATSAPP_NUMBER = "919412368618";
 const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I%27m%20interested%20in%20Aura%20Heights.`;
 const UNIT_OPTIONS = ["2BHK", "3BHK", "3BHK+", "Undecided"];
+const FORMSPREE_STATUS = "pending-client-endpoint";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -48,6 +49,11 @@ export default function Contact() {
 
     if (!formData.unit) {
       setSubmitNotice("Please select your unit of interest before submitting.");
+      return;
+    }
+
+    if (FORMSPREE_STATUS === "pending-client-endpoint") {
+      setSubmitNotice("Form endpoint is pending from the client. Please use Direct Call or WhatsApp for now.");
       return;
     }
 

@@ -13,21 +13,35 @@ export default function Vision() {
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    
-    // Background color transition from previous section to dark vision bg
+
+    let trigger: ScrollTrigger | undefined;
+
     if (sectionRef.current) {
-      ScrollTrigger.create({
+      trigger = ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top center",
         end: "bottom center",
-        onEnter: () => gsap.to("body", { backgroundColor: "var(--color-vision)", color: "#fff", duration: 1 }),
-        onLeaveBack: () => gsap.to("body", { backgroundColor: "var(--color-bg)", color: "var(--color-primary)", duration: 1 }),
+        onEnter: () =>
+          gsap.to("body", {
+            backgroundColor: "var(--color-vision)",
+            color: "#fff",
+            duration: 1,
+            overwrite: "auto",
+          }),
+        onLeaveBack: () =>
+          gsap.to("body", {
+            backgroundColor: "var(--color-bg)",
+            color: "var(--color-primary)",
+            duration: 1,
+            overwrite: "auto",
+          }),
       });
     }
-    
+
     return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill());
-    }
+      trigger?.kill();
+      gsap.killTweensOf("body");
+    };
   }, []);
 
   return (
@@ -91,6 +105,7 @@ export default function Vision() {
                 src="https://player.vimeo.com/video/1180218679?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&loop=1" 
                 frameBorder="0" 
                 allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
+                loading="lazy"
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} 
                 title="Aura Heights Vision"
               ></iframe>

@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState } from "react";
 
 type SpecIconName =
@@ -202,6 +202,7 @@ function SpecIcon({ name }: { name: SpecIconName }) {
 
 export default function Specifications() {
   const [openId, setOpenId] = useState<string>(specificationRows[0].id);
+  const motionEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
   return (
     <section
@@ -224,13 +225,21 @@ export default function Specifications() {
         <div className="border-t border-[#C4A06040]">
           {specificationRows.map((row) => {
             const isOpen = openId === row.id;
+            const rowWrapperClass = isOpen
+              ? "my-3 rounded-2xl border border-[#C4A06055] bg-[#F1EBE2]"
+              : "border-b border-[#C4A06040]";
 
             return (
-              <div key={row.id} className="border-b border-[#C4A06040]">
+              <motion.div
+                key={row.id}
+                layout
+                transition={{ layout: { duration: 0.4, ease: motionEase } }}
+                className={rowWrapperClass}
+              >
                 <button
                   type="button"
                   onClick={() => setOpenId((prev) => (prev === row.id ? "" : row.id))}
-                  className="w-full py-6 md:py-7 text-left flex items-center justify-between gap-5"
+                  className="w-full px-3 md:px-5 py-6 md:py-7 text-left flex items-center justify-between gap-5"
                   aria-expanded={isOpen}
                 >
                   <div className="flex items-center gap-4">
@@ -238,34 +247,49 @@ export default function Specifications() {
                     <span className="font-tenor text-[18px] md:text-[20px] text-primary/90">{row.title}</span>
                   </div>
 
-                  <span className="font-josefin text-[1.35rem] leading-none text-bronze min-w-[1.2rem] text-right" aria-hidden>
+                  <motion.span
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: 0.28, ease: motionEase }}
+                    className="font-josefin text-[1.35rem] leading-none text-bronze min-w-[1.2rem] text-right"
+                    aria-hidden
+                  >
                     {isOpen ? "−" : "+"}
-                  </span>
+                  </motion.span>
                 </button>
 
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
-                      className="overflow-hidden"
-                    >
-                      <div className="rounded-b-xl bg-[#F1EBE2] px-3 md:px-5 pb-7">
-                        <ul className="pl-2 md:pl-8 space-y-3.5">
-                          {row.points.map((point) => (
-                            <li key={point} className="flex items-start gap-3 font-tenor text-[15px] md:text-[16px] leading-8 text-primary/88">
-                              <span className="mt-2.5 h-1 w-1 rounded-full bg-[#B8892A] flex-shrink-0" />
-                              <span>{point}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                <motion.div
+                  initial={false}
+                  animate={{
+                    height: isOpen ? "auto" : 0,
+                    opacity: isOpen ? 1 : 0,
+                  }}
+                  transition={{
+                    height: { duration: 0.42, ease: motionEase },
+                    opacity: { duration: isOpen ? 0.3 : 0.2, ease: "easeOut" },
+                  }}
+                  className="overflow-hidden"
+                  aria-hidden={!isOpen}
+                >
+                  <motion.div
+                    initial={false}
+                    animate={{
+                      y: isOpen ? 0 : -8,
+                      filter: isOpen ? "blur(0px)" : "blur(2px)",
+                    }}
+                    transition={{ duration: 0.34, ease: motionEase }}
+                    className="mb-6 rounded-2xl border border-[#E5D9C8] bg-[#F1EBE2] px-4 md:px-6 py-6"
+                  >
+                    <ul className="pl-2 md:pl-8 space-y-3.5">
+                      {row.points.map((point) => (
+                        <li key={point} className="flex items-start gap-3 font-tenor text-[15px] md:text-[16px] leading-8 text-primary/88">
+                          <span className="mt-2.5 h-1 w-1 rounded-full bg-[#B8892A] flex-shrink-0" />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
             );
           })}
         </div>

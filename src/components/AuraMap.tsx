@@ -2,6 +2,17 @@
 
 export default function AuraMap() {
   const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+
+  if (!token) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-bg text-center px-6">
+        <p className="font-tenor text-primary/75 leading-relaxed max-w-sm">
+          Map preview is unavailable right now.
+        </p>
+      </div>
+    );
+  }
+
   const src = `https://api.mapbox.com/styles/v1/luxiesites/cmnmsq6mt000101s30gy23zsd.html?title=false&access_token=${token}&zoomwheel=false#14.5/30.39598/78.0693`;
 
   return (

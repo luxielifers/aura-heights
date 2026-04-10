@@ -71,7 +71,11 @@ export default function EminentFeatures() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    if (containerRef.current) {
+    const ctx = gsap.context(() => {
+      if (!containerRef.current) {
+        return;
+      }
+
       const strips = gsap.utils.toArray(".distinction-strip", containerRef.current);
 
       gsap.fromTo(
@@ -80,16 +84,20 @@ export default function EminentFeatures() {
         {
           opacity: 1,
           y: 0,
-          duration: 0.7,
+          duration: 0.65,
           stagger: 0.08,
           ease: "power2.out",
           scrollTrigger: {
             trigger: containerRef.current,
-            start: "top 80%",
+            start: "top 92%",
           },
         }
       );
-    }
+    }, containerRef);
+
+    return () => {
+      ctx.revert();
+    };
   }, []);
 
   return (

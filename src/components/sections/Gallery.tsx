@@ -18,7 +18,11 @@ export default function Gallery() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    if (scrollContainerRef.current) {
+    const ctx = gsap.context(() => {
+      if (!scrollContainerRef.current) {
+        return;
+      }
+
       const cards = gsap.utils.toArray(".gallery-card", scrollContainerRef.current);
 
       gsap.fromTo(
@@ -36,7 +40,11 @@ export default function Gallery() {
           },
         }
       );
-    }
+    }, scrollContainerRef);
+
+    return () => {
+      ctx.revert();
+    };
   }, []);
 
   const handlePrev = (e: React.MouseEvent) => {

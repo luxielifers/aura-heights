@@ -14,9 +14,12 @@ export default function Hero({ isPreloading = false }: { isPreloading?: boolean 
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    
-    // Parallax effect on scroll
-    if (bgRef.current) {
+
+    const ctx = gsap.context(() => {
+      if (!bgRef.current) {
+        return;
+      }
+
       gsap.to(bgRef.current, {
         yPercent: 40,
         ease: "none",
@@ -27,7 +30,11 @@ export default function Hero({ isPreloading = false }: { isPreloading?: boolean 
           scrub: true,
         },
       });
-    }
+    }, bgRef);
+
+    return () => {
+      ctx.revert();
+    };
   }, []);
 
   const subLines = ["Residences designed for", "those who expect the", "extraordinary."];

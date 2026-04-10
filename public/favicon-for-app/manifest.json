@@ -1,0 +1,28 @@
+{
+  "name": "Aura Heights",
+  "short_name": "Aura Heights",
+  "description": "Luxury residences in Dehradun.",
+  "id": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/favicon-for-app/icon1.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-for-app/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-for-app/icon0.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "theme_color": "#faf7f2",
+  "background_color": "#faf7f2",
+  "display": "standalone"
+}
