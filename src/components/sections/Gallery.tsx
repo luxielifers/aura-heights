@@ -68,15 +68,10 @@ export default function Gallery() {
             <div className="flex flex-wrap items-center gap-3">
               <Link
                 href="/gallery"
+                prefetch
                 className="inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-bronze bg-bg text-bronze px-8 md:px-12 py-4 hover:bg-bronze hover:text-white transition-shadow hover:shadow-[0_0_20px_rgba(184,137,42,0.4)]"
               >
                 View Full Gallery
-              </Link>
-              <Link
-                href="/gallery?tab=Layouts"
-                className="inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-marble bg-transparent text-primary px-8 md:px-12 py-4 hover:border-bronze hover:text-bronze transition-colors"
-              >
-                View Layouts
               </Link>
             </div>
           </div>
@@ -122,6 +117,7 @@ export default function Gallery() {
                     alt={`Aura Heights Gallery ${idx + 1}`}
                     fill
                     sizes="320px"
+                    quality={68}
                     className="object-cover"
                   />
                   {/* Bronze shimmer on hover */}
@@ -146,6 +142,7 @@ export default function Gallery() {
                   alt={`Aura Heights Gallery ${idx + 1}`}
                   fill
                   sizes="(max-width: 768px) 82vw, 320px"
+                  quality={68}
                   className="object-cover transition-transform duration-700 group-active:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-bronze/35 via-transparent to-transparent" />
@@ -180,6 +177,7 @@ export default function Gallery() {
               src={homeGalleryImages[lightboxIndex]}
               alt="Aura Heights Detail"
               fill
+              quality={82}
               className="object-contain"
             />
           </div>

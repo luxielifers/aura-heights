@@ -24,9 +24,15 @@ export default function Footer() {
 
         <div className="flex flex-col items-center md:items-end gap-6">
           <nav className="flex flex-wrap justify-center gap-4 text-xs font-josefin uppercase tracking-[0.1em] text-muted">
-            <Link href="#residences" className="hover:text-bronze transition-colors">Residences</Link>
+            <Link href="#about" className="hover:text-bronze transition-colors">Overview</Link>
             <span>·</span>
-            <Link href="#amenities" className="hover:text-bronze transition-colors">Amenities</Link>
+            <Link href="#residences" className="hover:text-bronze transition-colors">Residences/Layouts</Link>
+            <span>·</span>
+            <Link href="#vision" className="hover:text-bronze transition-colors">Vision</Link>
+            <span>·</span>
+            <Link href="#specifications" className="hover:text-bronze transition-colors">Specifications</Link>
+            <span>·</span>
+            <Link href="#features" className="hover:text-bronze transition-colors">Features</Link>
             <span>·</span>
             <Link href="#gallery" className="hover:text-bronze transition-colors">Gallery</Link>
             <span>·</span>

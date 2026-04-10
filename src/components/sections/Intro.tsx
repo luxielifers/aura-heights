@@ -82,6 +82,8 @@ export default function Intro() {
                 src="/images/gallery/exterior/outsidegarden.jpg"
                 alt="Aura Heights Architecture"
                 fill
+                sizes="(max-width: 768px) 92vw, 56vw"
+                quality={72}
                 className="object-cover scale-105 hover:scale-100 transition-transform duration-[2s]"
               />
             </motion.div>

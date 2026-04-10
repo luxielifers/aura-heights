@@ -1,13 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { Phone, MessageCircle } from "lucide-react";
 
 const PHONE_DISPLAY = "+91 94123 68618";
 const PHONE_HREF = "tel:+919412368618";
 const WHATSAPP_NUMBER = "919412368618";
 const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I%27m%20interested%20in%20Aura%20Heights.`;
+const UNIT_OPTIONS = ["2BHK", "3BHK", "3BHK+", "Undecided"];
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -17,10 +18,39 @@ export default function Contact() {
     message: "",
   });
   const [submitNotice, setSubmitNotice] = useState("");
-  const [unitFocused, setUnitFocused] = useState(false);
+  const [unitMenuOpen, setUnitMenuOpen] = useState(false);
+  const unitMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handlePointerDown = (event: MouseEvent) => {
+      if (unitMenuRef.current && !unitMenuRef.current.contains(event.target as Node)) {
+        setUnitMenuOpen(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setUnitMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("mousedown", handlePointerDown);
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      window.removeEventListener("mousedown", handlePointerDown);
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!formData.unit) {
+      setSubmitNotice("Please select your unit of interest before submitting.");
+      return;
+    }
+
     setSubmitNotice("Online form submissions will be enabled shortly. Please use Direct Call or WhatsApp.");
   };
 
@@ -107,47 +137,90 @@ export default function Contact() {
                 </div>
               </div>
 
-              <div className="relative group">
-                <select 
+              <div ref={unitMenuRef} className="relative group">
+                <input type="hidden" name="unit" value={formData.unit} />
+                <button
                   id="unit"
-                  name="unit"
-                  value={formData.unit}
-                  onChange={e => setFormData({...formData, unit: e.target.value})}
-                  onFocus={() => setUnitFocused(true)}
-                  onBlur={() => setUnitFocused(false)}
-                  className="w-full bg-transparent border-b border-marble py-4 pr-9 font-tenor text-primary focus:outline-none focus:border-bronze transition-all duration-300 peer appearance-none"
-                  required
+                  type="button"
+                  aria-haspopup="listbox"
+                  aria-expanded={unitMenuOpen}
+                  onClick={() => setUnitMenuOpen((prev) => !prev)}
+                  className="w-full bg-transparent border-b border-marble pt-8 pb-3 pr-9 text-left font-tenor text-primary focus:outline-none focus:border-bronze transition-all duration-300"
                 >
-                  <option value="" disabled hidden></option>
-                  <option value="2BHK">2BHK</option>
-                  <option value="3BHK">3BHK</option>
-                  <option value="3BHK+">3BHK+</option>
-                  <option value="Undecided">Undecided</option>
-                </select>
-                <label 
-                  htmlFor="unit" 
-                  className={`absolute left-0 tracking-widest uppercase transition-all duration-300 font-josefin 
-                    ${formData.unit ? "-top-4 text-[10px] text-muted" : "top-4 text-xs text-muted peer-focus:-top-4 peer-focus:text-[10px] peer-focus:text-bronze"}
-                  `}
+                  <span className={formData.unit ? "text-primary" : "text-muted/75"}>
+                    {formData.unit || "Select your preferred residence"}
+                  </span>
+                </button>
+
+                <label
+                  htmlFor="unit"
+                  className={`absolute left-0 top-2 text-[10px] tracking-[0.2em] uppercase transition-colors duration-300 font-josefin pointer-events-none ${
+                    formData.unit || unitMenuOpen ? "text-bronze" : "text-muted"
+                  }`}
                 >
                   Unit of Interest
                 </label>
+
                 <motion.div
-                  className="absolute right-0 top-5 pointer-events-none"
-                  animate={{ rotate: unitFocused ? 180 : 0, y: unitFocused ? 2 : 0 }}
+                  className="absolute right-0 top-7 pointer-events-none"
+                  animate={{ rotate: unitMenuOpen ? 180 : 0, y: unitMenuOpen ? 1 : 0 }}
                   transition={{ duration: 0.25, ease: "easeOut" }}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="text-muted" />
                   </svg>
                 </motion.div>
+
                 <motion.div
                   className="absolute left-0 right-0 -bottom-[1px] h-[1px] bg-bronze"
                   initial={false}
-                  animate={{ scaleX: unitFocused ? 1 : 0 }}
+                  animate={{ scaleX: unitMenuOpen ? 1 : 0 }}
                   transition={{ duration: 0.3, ease: "easeOut" }}
                   style={{ originX: 0 }}
                 />
+
+                <AnimatePresence>
+                  {unitMenuOpen && (
+                    <motion.div
+                      role="listbox"
+                      initial={{ opacity: 0, y: -10, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                      transition={{ duration: 0.22, ease: "easeOut" }}
+                      className="absolute left-0 right-0 top-[calc(100%+0.7rem)] z-30 overflow-hidden rounded-2xl border border-marble/90 bg-bg/95 backdrop-blur-xl shadow-[0_20px_55px_rgba(0,0,0,0.12)]"
+                    >
+                      <div className="py-1.5">
+                        {UNIT_OPTIONS.map((option) => {
+                          const isActive = formData.unit === option;
+
+                          return (
+                            <button
+                              key={option}
+                              type="button"
+                              role="option"
+                              aria-selected={isActive}
+                              onClick={() => {
+                                setFormData({ ...formData, unit: option });
+                                setUnitMenuOpen(false);
+                                setSubmitNotice("");
+                              }}
+                              className={`w-full flex items-center justify-between px-4 py-3 transition-colors ${
+                                isActive ? "bg-bronze/10 text-bronze" : "text-primary hover:bg-marble/70"
+                              }`}
+                            >
+                              <span className="font-josefin text-[10px] tracking-[0.2em] uppercase">{option}</span>
+                              <span
+                                className={`h-2.5 w-2.5 rounded-full border ${
+                                  isActive ? "border-bronze bg-bronze" : "border-marble"
+                                }`}
+                              />
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               <div className="relative group">
@@ -185,37 +258,49 @@ export default function Contact() {
           {/* Right: Direct Contact */}
           <div className="w-full lg:w-1/3 flex flex-col justify-center gap-12 lg:pl-12 lg:border-l border-marble/50">
             
-            <motion.div 
+            <motion.a
+              href={PHONE_HREF}
+              aria-label="Call Aura Heights sales"
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
+              whileHover={{ y: -2, scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
+              className="block rounded-2xl border border-marble/60 bg-bg/45 p-6 md:p-7 transition-colors hover:border-bronze/60 hover:bg-bg/65"
             >
               <div className="flex items-center gap-4 mb-4 text-bronze">
                 <Phone size={24} strokeWidth={1.5} />
                 <h3 className="font-cormorant text-2xl text-primary">Direct Call</h3>
               </div>
               <p className="font-tenor text-muted mb-2">Speak to our sales director directly.</p>
-              <a href={PHONE_HREF} className="font-josefin text-lg tracking-widest text-primary hover:text-bronze transition-colors block">
+              <p className="font-josefin text-lg tracking-widest text-primary">
                 {PHONE_DISPLAY}
-              </a>
-            </motion.div>
+              </p>
+            </motion.a>
 
-            <motion.div 
+            <motion.a
+              href={WHATSAPP_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Message Aura Heights on WhatsApp"
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
+              whileHover={{ y: -2, scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
+              className="block rounded-2xl border border-marble/60 bg-bg/45 p-6 md:p-7 transition-colors hover:border-bronze/60 hover:bg-bg/65"
             >
               <div className="flex items-center gap-4 mb-4 text-bronze">
                 <MessageCircle size={24} strokeWidth={1.5} />
                 <h3 className="font-cormorant text-2xl text-primary">WhatsApp</h3>
               </div>
               <p className="font-tenor text-muted mb-2">Get brochure & floor plans instantly.</p>
-              <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="font-josefin text-lg tracking-widest text-primary hover:text-bronze transition-colors block">
+              <p className="font-josefin text-lg tracking-widest text-primary">
                 Message Us
-              </a>
-            </motion.div>
+              </p>
+            </motion.a>
 
           </div>
 

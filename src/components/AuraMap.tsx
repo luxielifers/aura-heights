@@ -1,7 +1,5 @@
 "use client";
 
-const GOOGLE_MAPS_URL = "https://maps.app.goo.gl/QFRgpTvonGdywXjC9";
-
 export default function AuraMap() {
   const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
   const src = `https://api.mapbox.com/styles/v1/luxiesites/cmnmsq6mt000101s30gy23zsd.html?title=false&access_token=${token}&zoomwheel=false#14.5/30.39598/78.0693`;

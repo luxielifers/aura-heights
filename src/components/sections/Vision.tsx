@@ -4,10 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Play } from "lucide-react";
+import { useCookieConsent } from "@/components/providers";
 
 export default function Vision() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const { canLoadThirdParty, acceptCookies } = useCookieConsent();
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -29,7 +31,7 @@ export default function Vision() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-32 relative bg-vision min-h-screen flex flex-col justify-center text-white transition-colors duration-700">
+    <section id="vision" ref={sectionRef} className="py-32 relative bg-vision min-h-screen flex flex-col justify-center text-white transition-colors duration-700">
       <div className="container mx-auto px-6 md:px-12 relative z-10 flex flex-col items-center">
         
         <div className="mb-8 font-josefin tracking-[0.25em] text-xs uppercase" style={{ color: "var(--color-bronze)" }}>
@@ -43,15 +45,41 @@ export default function Vision() {
         </h2>
 
         {/* Video Embed */}
-        <div className="w-full max-w-5xl aspect-video relative group cursor-pointer" onClick={() => setIsPlaying(true)}>
+        <div
+          className={`w-full max-w-5xl aspect-video relative group ${canLoadThirdParty ? "cursor-pointer" : "cursor-default"}`}
+          onClick={() => {
+            if (canLoadThirdParty) {
+              setIsPlaying(true);
+            }
+          }}
+        >
           {!isPlaying ? (
             <>
                {/* Video Thumbnail / Placeholder overlay */}
-               <div className="absolute inset-0 bg-black/40 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-black/20">
+               <div className="absolute inset-0 bg-black/40 border border-white/10 flex flex-col items-center justify-center transition-all duration-300 group-hover:bg-black/20">
                  {/* Custom Play Button */}
                  <div className="w-20 h-20 rounded-full border border-bronze bg-bronze/10 backdrop-blur-md flex items-center justify-center text-bronze transition-transform duration-300 group-hover:scale-110">
                    <Play className="ml-1" size={32} />
                  </div>
+
+                 {!canLoadThirdParty && (
+                   <>
+                     <p className="mt-5 font-josefin text-[10px] uppercase tracking-[0.2em] text-white/85 text-center px-4">
+                       Optional cookies required for video playback
+                     </p>
+                     <button
+                       type="button"
+                       onClick={(event) => {
+                         event.stopPropagation();
+                         acceptCookies();
+                         setIsPlaying(true);
+                       }}
+                       className="mt-3 inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-bronze bg-bronze text-white px-5 py-2.5 hover:shadow-[0_0_18px_rgba(184,137,42,0.35)] transition-shadow"
+                     >
+                       Accept Cookies & Play
+                     </button>
+                   </>
+                 )}
                </div>
                
                {/* Thumbnail Image placeholder */}

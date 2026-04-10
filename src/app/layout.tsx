@@ -23,6 +23,11 @@ const josefin = Josefin_Sans({
 export const metadata: Metadata = {
   title: "Aura Heights | Luxury Residences",
   description: "Where Elevation Meets Elegance. Premium digital showroom for Aura Heights.",
+  icons: {
+    icon: "/images/faviconlogo.png",
+    shortcut: "/images/faviconlogo.png",
+    apple: "/images/faviconlogo.png",
+  },
 };
 
 export default function RootLayout({

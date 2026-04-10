@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -25,19 +25,27 @@ type NavItem = {
 };
 
 const navLinks: NavItem[] = [
-  { name: "Residences", href: "/#residences" },
   {
-    name: "Amenities",
-    href: "/#amenities",
-    children: [{ name: "View All Amenities", href: "/amenities" }],
+    name: "Overview",
+    href: "/#about",
+  },
+  {
+    name: "Residences/Layouts",
+    href: "/#residences",
+    children: [{ name: "View Layouts", href: "/gallery?tab=Layouts" }],
+  },
+  {
+    name: "Specifications",
+    href: "/#specifications",
+  },
+  {
+    name: "Features",
+    href: "/#features",
   },
   {
     name: "Gallery",
     href: "/#gallery",
-    children: [
-      { name: "View Full Gallery", href: "/gallery" },
-      { name: "View Layouts", href: "/gallery?tab=Layouts" },
-    ],
+    children: [{ name: "View Full Gallery", href: "/gallery" }],
   },
   { name: "Location", href: "/#location" },
   {
@@ -55,9 +63,22 @@ const navLinks: NavItem[] = [
   },
 ];
 
+const BROCHURE_FILE = "/AuraHeights_Brochure.pdf";
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export default function Navbar({ isPreloading = false }: { isPreloading?: boolean }) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [brochureModalOpen, setBrochureModalOpen] = useState(false);
+  const [brochureError, setBrochureError] = useState("");
+  const [brochureForm, setBrochureForm] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+  });
+  const [menuImageSrc, setMenuImageSrc] = useState("/images/gallery/exterior/fullbuildingevening.jpg");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -68,21 +89,27 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
+    document.body.style.overflow = menuOpen || brochureModalOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [menuOpen]);
+  }, [menuOpen, brochureModalOpen]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setMenuOpen(false);
+        setBrochureModalOpen(false);
       }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
+
+  useEffect(() => {
+    router.prefetch("/");
+    router.prefetch("/gallery");
+  }, [router]);
 
   const goToHref = (href: string) => {
     setMenuOpen(false);
@@ -97,26 +124,69 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
       return;
     }
 
-    if (href === "/gallery") {
-      window.location.assign(href);
-      return;
-    }
-
     const targetId = href.split("#")[1];
+    if (targetId && pathname === "/") {
+      const section = document.getElementById(targetId);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+        window.history.replaceState(null, "", `/#${targetId}`);
+        return;
+      }
+    }
+
     if (!targetId) {
-      window.location.assign(href);
+      router.push(href);
       return;
     }
 
-    if (window.location.pathname !== "/") {
-      window.location.assign(href);
+    router.push(href);
+  };
+
+  const openBrochureModal = () => {
+    setMenuOpen(false);
+    setBrochureError("");
+    setBrochureModalOpen(true);
+  };
+
+  const closeBrochureModal = () => {
+    setBrochureModalOpen(false);
+    setBrochureError("");
+  };
+
+  const handleBrochureSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const cleanedName = brochureForm.name.trim();
+    const cleanedEmail = brochureForm.email.trim();
+    const cleanedMobile = brochureForm.mobile.trim();
+
+    if (!cleanedName) {
+      setBrochureError("Please enter your name before opening the brochure.");
       return;
     }
 
-    const section = document.getElementById(targetId);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+    if (!/^\d{10}$/.test(cleanedMobile)) {
+      setBrochureError("Please enter a valid 10-digit mobile number.");
+      return;
     }
+
+    if (cleanedEmail && !EMAIL_REGEX.test(cleanedEmail)) {
+      setBrochureError("Please enter a valid email address or leave it blank.");
+      return;
+    }
+
+    const brochureWindow = window.open(BROCHURE_FILE, "_blank", "noopener,noreferrer");
+    if (!brochureWindow) {
+      window.location.assign(BROCHURE_FILE);
+    }
+
+    setBrochureModalOpen(false);
+    setBrochureError("");
+    setBrochureForm({
+      name: "",
+      email: "",
+      mobile: "",
+    });
   };
 
   return (
@@ -124,8 +194,19 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
-          scrolled ? "bg-bg/85 backdrop-blur-md py-4 shadow-sm text-primary" : "bg-transparent py-6 text-white"
+          scrolled ? "py-4 text-primary" : "bg-transparent py-6 text-white"
         )}
+        style={{
+          background: scrolled
+            ? "linear-gradient(125deg, rgba(255,255,255,0.34) 0%, rgba(250,247,242,0.44) 58%, rgba(255,255,255,0.3) 100%)"
+            : "rgba(255,255,255,0)",
+          backdropFilter: scrolled ? "blur(16px) saturate(135%)" : "blur(0px) saturate(100%)",
+          WebkitBackdropFilter: scrolled ? "blur(16px) saturate(135%)" : "blur(0px) saturate(100%)",
+          borderBottom: scrolled ? "1px solid rgba(255,255,255,0.45)" : "1px solid rgba(255,255,255,0)",
+          boxShadow: scrolled
+            ? "0 10px 34px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.35)"
+            : "0 0 0 rgba(0,0,0,0)",
+        }}
       >
         <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
           {/* Logo */}
@@ -138,6 +219,7 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
                 src="/images/logowithoutbg.png" 
                 alt="Aura Heights Logo"
                 fill
+                priority
                 sizes="(max-width: 768px) 48px, 64px"
                 className={cn(
                   "object-contain transition-all duration-500",
@@ -149,38 +231,192 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
 
           {/* Right CTA */}
           <div className="flex items-center gap-4 z-50 relative">
-            <motion.a 
-              href="/#contact"
-              onClick={(e) => {
-                const el = document.getElementById('contact');
-                if (el) {
-                  e.preventDefault();
-                  el.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
+            <motion.button
+              type="button"
+              onClick={openBrochureModal}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              className={cn(
+                "inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border px-4 sm:px-5 md:px-7 py-3.5 transition-colors",
+                scrolled ? "border-bronze/70 text-bronze bg-bg/60 hover:bg-bronze hover:text-white" : "border-[#FAF7F2]/75 text-[#FAF7F2] bg-transparent hover:bg-[#FAF7F2] hover:text-primary"
+              )}
+            >
+              <span className="sm:hidden">Brochure</span>
+              <span className="hidden sm:inline">Download Brochure</span>
+            </motion.button>
+
+            <motion.button
+              type="button"
+              onClick={() => goToHref("/#contact")}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-bronze bg-bronze text-white px-5 md:px-8 py-3.5 transition-shadow hover:shadow-[0_0_20px_rgba(184,137,42,0.4)]"
+              className="inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-bronze bg-bronze text-white px-4 sm:px-5 md:px-8 py-3.5 transition-shadow hover:shadow-[0_0_20px_rgba(184,137,42,0.4)]"
             >
-              Contact Us
-            </motion.a>
+              <span className="sm:hidden">Contact</span>
+              <span className="hidden sm:inline">Contact Us</span>
+            </motion.button>
 
-            <div className={cn("hidden md:block h-6 w-px", scrolled || menuOpen ? "bg-primary/25" : "bg-white/35")} />
-
-            <button 
+            <button
               className={cn(
-                "transition-colors duration-300",
+                "relative inline-flex h-11 items-center pl-5 transition-colors duration-300",
                 scrolled || menuOpen ? "text-primary" : "text-[#FAF7F2]"
               )}
               onClick={() => setMenuOpen((prev) => !prev)}
               aria-expanded={menuOpen}
               aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
             >
-              {menuOpen ? <X size={28} /> : <Menu size={28} />}
+              <span
+                aria-hidden
+                className={cn(
+                  "absolute left-0 top-1/2 h-7 w-px -translate-y-1/2 transition-opacity duration-300",
+                  scrolled || menuOpen ? "bg-primary/45" : "bg-white/65"
+                )}
+              />
+              <span className="sr-only">{menuOpen ? "Close menu" : "Open menu"}</span>
+              <div aria-hidden className="flex flex-col items-start gap-2.5">
+                <motion.span
+                  className="block h-px w-12 sm:w-14 md:w-28 bg-current origin-center"
+                  animate={
+                    menuOpen
+                      ? { scaleX: [1, 0.42, 0.42], rotate: [0, 0, 38], y: [0, 0, 4] }
+                      : { scaleX: [0.42, 0.42, 1], rotate: [38, 0, 0], y: [4, 0, 0] }
+                  }
+                  transition={{ duration: 0.26, times: [0, 0.55, 1], ease: "easeOut" }}
+                />
+                <motion.span
+                  className="block h-px w-12 sm:w-14 md:w-28 bg-current origin-center"
+                  animate={
+                    menuOpen
+                      ? { scaleX: [1, 0.42, 0.42], rotate: [0, 0, -38], y: [0, 0, -4] }
+                      : { scaleX: [0.42, 0.42, 1], rotate: [-38, 0, 0], y: [-4, 0, 0] }
+                  }
+                  transition={{ duration: 0.26, times: [0, 0.55, 1], ease: "easeOut" }}
+                />
+              </div>
             </button>
           </div>
         </div>
       </header>
+
+      <AnimatePresence>
+        {brochureModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[80] bg-black/55 backdrop-blur-sm px-4"
+            onClick={closeBrochureModal}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 22, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 22, scale: 0.98 }}
+              transition={{ duration: 0.28, ease: "easeOut" }}
+              className="mx-auto mt-24 md:mt-28 w-full max-w-xl rounded-[1.75rem] border border-marble/70 bg-bg px-6 sm:px-8 py-7 sm:py-8 shadow-[0_20px_70px_rgba(0,0,0,0.2)]"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="font-josefin text-[10px] uppercase tracking-[0.22em] text-bronze mb-3">Download Brochure</p>
+                  <h3 className="font-cormorant text-3xl sm:text-4xl text-primary leading-tight">
+                    Share your details
+                  </h3>
+                  <p className="mt-2 font-tenor text-sm text-muted">
+                    Enter your name and mobile number. Email is optional.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={closeBrochureModal}
+                  className="font-josefin uppercase text-[10px] tracking-[0.2em] text-muted hover:text-primary transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+
+              <form onSubmit={handleBrochureSubmit} className="mt-7 space-y-5">
+                <div>
+                  <label htmlFor="brochure-name" className="block font-josefin text-[10px] uppercase tracking-[0.2em] text-muted mb-2">
+                    Name *
+                  </label>
+                  <input
+                    id="brochure-name"
+                    type="text"
+                    value={brochureForm.name}
+                    onChange={(event) => {
+                      setBrochureError("");
+                      setBrochureForm((prev) => ({ ...prev, name: event.target.value }));
+                    }}
+                    className="w-full rounded-xl border border-marble bg-bg-secondary px-4 py-3 font-tenor text-primary placeholder:text-muted/70 focus:outline-none focus:border-bronze"
+                    placeholder="Enter your full name"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="brochure-email" className="block font-josefin text-[10px] uppercase tracking-[0.2em] text-muted mb-2">
+                    Email (Optional)
+                  </label>
+                  <input
+                    id="brochure-email"
+                    type="email"
+                    value={brochureForm.email}
+                    onChange={(event) => {
+                      setBrochureError("");
+                      setBrochureForm((prev) => ({ ...prev, email: event.target.value }));
+                    }}
+                    className="w-full rounded-xl border border-marble bg-bg-secondary px-4 py-3 font-tenor text-primary placeholder:text-muted/70 focus:outline-none focus:border-bronze"
+                    placeholder="name@example.com"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="brochure-mobile" className="block font-josefin text-[10px] uppercase tracking-[0.2em] text-muted mb-2">
+                    Mobile Number *
+                  </label>
+                  <input
+                    id="brochure-mobile"
+                    type="tel"
+                    inputMode="numeric"
+                    value={brochureForm.mobile}
+                    onChange={(event) => {
+                      setBrochureError("");
+                      setBrochureForm((prev) => ({
+                        ...prev,
+                        mobile: event.target.value.replace(/\D/g, "").slice(0, 10),
+                      }));
+                    }}
+                    className="w-full rounded-xl border border-marble bg-bg-secondary px-4 py-3 font-tenor text-primary placeholder:text-muted/70 focus:outline-none focus:border-bronze"
+                    placeholder="10-digit mobile number"
+                    required
+                  />
+                </div>
+
+                {brochureError ? (
+                  <p className="font-tenor text-sm text-[#A84332]">{brochureError}</p>
+                ) : null}
+
+                <div className="pt-1 flex flex-col sm:flex-row gap-3">
+                  <button
+                    type="submit"
+                    className="inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-bronze bg-bronze text-white px-6 py-3.5 transition-shadow hover:shadow-[0_0_20px_rgba(184,137,42,0.4)]"
+                  >
+                    Submit & Open Brochure
+                  </button>
+                  <button
+                    type="button"
+                    onClick={closeBrochureModal}
+                    className="inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-marble bg-transparent text-primary px-6 py-3.5 hover:border-bronze hover:text-bronze transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {menuOpen && (
@@ -243,11 +479,19 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
                   className="hidden md:block relative overflow-hidden border border-marble/70 h-full min-h-[540px]"
                 >
                   <Image
-                    src="/images/gallery/exterior/exteriorview.png"
+                    src={menuImageSrc}
                     alt="Aura Heights exterior"
                     fill
+                    priority={menuOpen}
+                    quality={68}
+                    unoptimized
                     sizes="50vw"
                     className="object-cover"
+                    onError={() => {
+                      if (menuImageSrc !== "/images/gallery/exterior/outside.jpg") {
+                        setMenuImageSrc("/images/gallery/exterior/outside.jpg");
+                      }
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
                   <div className="absolute left-6 bottom-6">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import Image from "next/image";
 
@@ -68,7 +68,6 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
     return () => {
       tl.kill();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // intentionally empty — runs once on mount only
 
   return (

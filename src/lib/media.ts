@@ -20,25 +20,66 @@ const interiorImages = [
   "/images/gallery/Interior/balcony.jpg",
 ];
 
-const layoutImages = [
-  "/images/sunmap.jpg",
-  "/images/layouts/sitemap.png",
-  "/images/layouts/floorplan_2bhk_L.jpg",
-  "/images/layouts/floorplan_2bhk_R.jpg",
-  "/images/layouts/floorplan_3bhk_L_horizontal.jpg",
-  "/images/layouts/floorplan_3bhk_L_vertical.jpg",
-  "/images/layouts/floorplan_3bhk_R.jpg",
+export type LayoutGalleryItem = {
+  src: string;
+  title: string;
+};
+
+export type LayoutGalleryGroup = {
+  id: string;
+  title: string;
+  items: LayoutGalleryItem[];
+};
+
+export const layoutReferenceMaps: LayoutGalleryItem[] = [
+  { src: "/images/sunmap.jpg", title: "Sun Map" },
+  { src: "/images/layouts/sitemap.png", title: "Site Map" },
 ];
 
-export const layoutImageTitles: string[] = [
-  "Sun Map",
-  "Project Sitemap",
-  "2 BHK Layout - Left Wing",
-  "2 BHK Layout - Right Wing",
-  "3 BHK Layout - Left Wing (Horizontal)",
-  "3 BHK Layout - Left Wing (Vertical)",
-  "3 BHK Layout - Right Wing",
+// Keep this grouped structure as the source of truth for layouts.
+export const layoutGalleryGroups: LayoutGalleryGroup[] = [
+  {
+    id: "2bhk-l1-r1",
+    title: "2BHK L1 - R1",
+    items: [
+      { src: "/images/layouts/2bhks/2bhk_L1.jpg", title: "2BHK L1" },
+      { src: "/images/layouts/2bhks/2BHK_R1.jpg", title: "2BHK R1" },
+      { src: "/images/layouts/2bhks/floorplan_2bhk_L.jpg", title: "2BHK L1 Floor Plan" },
+      { src: "/images/layouts/2bhks/floorplan_2bhk_R.jpg", title: "2BHK R1 Floor Plan" },
+    ],
+  },
+  {
+    id: "3bhk-l3-r3",
+    title: "3BHK L3 - R3",
+    items: [
+      { src: "/images/layouts/3bhk/3BHK_l3.jpg", title: "3BHK L3" },
+      { src: "/images/layouts/3bhk/3bhk_R3.jpg", title: "3BHK R3" },
+      { src: "/images/layouts/3bhk/floorplan_3bhk_L_vertical.jpg", title: "3BHK L3 Floor Plan" },
+    ],
+  },
+  {
+    id: "3bhkplus-l2-r2",
+    title: "3BHK+ L2 - R2",
+    items: [
+      { src: "/images/layouts/3bhkplus/3bhk_L2.jpg", title: "3BHK+ L2" },
+      { src: "/images/layouts/3bhkplus/3bhk_R2.jpg", title: "3BHK+ R2" },
+      { src: "/images/layouts/3bhkplus/floorplan_3bhk_L_horizontal.jpg", title: "3BHK+ L2 Floor Plan" },
+      { src: "/images/layouts/3bhkplus/floorplan_3bhk_R.jpg", title: "3BHK+ R2 Floor Plan" },
+    ],
+  },
 ];
+
+export const layoutGallerySections: LayoutGalleryGroup[] = [
+  ...layoutGalleryGroups,
+  {
+    id: "maps",
+    title: "Sun & Site Maps",
+    items: layoutReferenceMaps,
+  },
+];
+
+export const layoutGalleryItems: LayoutGalleryItem[] = layoutGallerySections.flatMap((section) => section.items);
+const layoutImages = layoutGalleryItems.map((item) => item.src);
 
 export const homeGalleryImages: string[] = [
   exteriorImages[1],

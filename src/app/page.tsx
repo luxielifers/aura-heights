@@ -1,19 +1,22 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import dynamic from "next/dynamic";
 import Preloader from "@/components/Preloader";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 import Hero from "@/components/sections/Hero";
-import Intro from "@/components/sections/Intro";
-import Residences from "@/components/sections/Residences";
-import Vision from "@/components/sections/Vision";
-import Amenities from "@/components/sections/Amenities";
-import Gallery from "@/components/sections/Gallery";
-import Location from "@/components/sections/Location";
-import Contact from "@/components/sections/Contact";
 import WhatsAppButton from "@/components/WhatsAppButton";
+
+const Intro = dynamic(() => import("@/components/sections/Intro"));
+const EminentFeatures = dynamic(() => import("@/components/sections/EminentFeatures"));
+const Residences = dynamic(() => import("@/components/sections/Residences"));
+const Specifications = dynamic(() => import("@/components/sections/Specifications"));
+const Vision = dynamic(() => import("@/components/sections/Vision"));
+const Gallery = dynamic(() => import("@/components/sections/Gallery"));
+const Location = dynamic(() => import("@/components/sections/Location"));
+const Contact = dynamic(() => import("@/components/sections/Contact"));
 
 // Module-level flag: resets on every hard refresh / new page load,
 // but persists in memory during SPA navigation (Next.js link clicks).
@@ -49,11 +52,12 @@ export default function Home() {
         {/* We keep Navbar visible under preloader so it flows cleanly when preloader fades out */}
         <Navbar isPreloading={isPreloading} />
         
-        <Hero />
+        <Hero isPreloading={isPreloading} />
         <Intro />
         <Residences />
         <Vision />
-        <Amenities />
+        <Specifications />
+        <EminentFeatures />
         <Gallery />
         <Location />
         <Contact />
