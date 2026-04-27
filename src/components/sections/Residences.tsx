@@ -147,21 +147,21 @@ export default function Residences() {
                   <Link
                     href="/gallery?tab=Layouts"
                     prefetch
-                    className="inline-flex items-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-bronze text-bronze px-7 py-3 transition-all duration-300 hover:bg-bronze hover:text-white hover:shadow-[0_0_20px_rgba(184,137,42,0.32)]"
+                    className="inline-flex items-center gap-2.5 font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-bronze bg-bronze text-white px-8 py-3.5 transition-all duration-300 hover:shadow-[0_0_28px_rgba(184,137,42,0.55)] hover:bg-bronze-light"
                     style={{
-                      background: "linear-gradient(120deg, rgba(250,247,242,0.96), rgba(240,235,227,0.92))",
-                      boxShadow: "0 8px 22px rgba(184,137,42,0.16), inset 0 1px 0 rgba(255,255,255,0.7)",
+                      boxShadow: "0 4px 18px rgba(184,137,42,0.28), inset 0 1px 0 rgba(255,255,255,0.2)",
                     }}
                   >
                     View Layouts
+                    <span className="opacity-75">→</span>
                   </Link>
 
                   <button
                     type="button"
                     onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-                    className="font-josefin uppercase text-[10px] tracking-[0.2em] border-b border-bronze text-primary hover:text-bronze pb-1 transition-colors inline-block"
+                    className="font-josefin uppercase text-[10px] tracking-[0.2em] border-b border-bronze/50 text-muted hover:text-bronze hover:border-bronze pb-1 transition-colors inline-block"
                   >
-                    Enquire About This Unit →
+                    Enquire About This Unit
                   </button>
                 </div>
               </motion.div>

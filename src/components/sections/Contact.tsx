@@ -9,7 +9,7 @@ const PHONE_HREF = "tel:+919412368618";
 const WHATSAPP_NUMBER = "919412368618";
 const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I%27m%20interested%20in%20Aura%20Heights.`;
 const UNIT_OPTIONS = ["2BHK", "3BHK", "3BHK+", "Undecided"];
-const FORMSPREE_STATUS = "pending-client-endpoint";
+const FORMSPREE_CONTACT = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT;
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -19,6 +19,7 @@ export default function Contact() {
     message: "",
   });
   const [submitNotice, setSubmitNotice] = useState("");
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [unitMenuOpen, setUnitMenuOpen] = useState(false);
   const unitMenuRef = useRef<HTMLDivElement>(null);
 
@@ -44,7 +45,7 @@ export default function Contact() {
     };
   }, []);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!formData.unit) {
@@ -52,12 +53,39 @@ export default function Contact() {
       return;
     }
 
-    if (FORMSPREE_STATUS === "pending-client-endpoint") {
-      setSubmitNotice("Form endpoint is pending from the client. Please use Direct Call or WhatsApp for now.");
+    // If Formspree is not yet configured, guide user to WhatsApp
+    if (!FORMSPREE_CONTACT || FORMSPREE_CONTACT.startsWith("REPLACE_")) {
+      setSubmitNotice("Our online form will be live shortly. Please reach us via Direct Call or WhatsApp in the meantime.");
       return;
     }
 
-    setSubmitNotice("Online form submissions will be enabled shortly. Please use Direct Call or WhatsApp.");
+    setSubmitStatus("submitting");
+    setSubmitNotice("");
+
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_CONTACT}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          unit: formData.unit,
+          message: formData.message || undefined,
+          _subject: `Private Viewing Request — Aura Heights (${formData.unit})`,
+        }),
+      });
+
+      if (res.ok) {
+        setSubmitStatus("success");
+        setSubmitNotice("Thank you! We’ll reach out shortly to schedule your private viewing.");
+        setFormData({ name: "", phone: "", unit: "", message: "" });
+      } else {
+        throw new Error("Submission failed");
+      }
+    } catch {
+      setSubmitStatus("error");
+      setSubmitNotice("Something went wrong. Please try WhatsApp or call us directly.");
+    }
   };
 
   return (
@@ -246,17 +274,20 @@ export default function Contact() {
                 </label>
               </div>
 
-              <motion.button 
+              <motion.button
                 type="submit"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="font-josefin uppercase text-xs tracking-[0.2em] rounded-full border border-bronze px-12 py-4 text-white bg-bronze transition-shadow hover:shadow-[0_0_20px_rgba(184,137,42,0.4)] w-full md:w-auto mt-4"
+                disabled={submitStatus === "submitting"}
+                whileHover={submitStatus !== "submitting" ? { scale: 1.02 } : {}}
+                whileTap={submitStatus !== "submitting" ? { scale: 0.98 } : {}}
+                className="font-josefin uppercase text-xs tracking-[0.2em] rounded-full border border-bronze px-12 py-4 text-white bg-bronze transition-all hover:shadow-[0_0_20px_rgba(184,137,42,0.4)] w-full md:w-auto mt-4 disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                Submit Request
+                {submitStatus === "submitting" ? "Sending…" : submitStatus === "success" ? "Request Sent ✓" : "Submit Request"}
               </motion.button>
 
               {submitNotice ? (
-                <p className="font-tenor text-sm text-muted">{submitNotice}</p>
+                <p className={`font-tenor text-sm ${submitStatus === "success" ? "text-[#4A7C59]" : submitStatus === "error" ? "text-[#A84332]" : "text-muted"}`}>
+                  {submitNotice}
+                </p>
               ) : null}
             </form>
           </div>

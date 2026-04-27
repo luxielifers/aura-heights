@@ -40,36 +40,120 @@
   --font-josefin: var(--font-josefin);
 }
 
+/* ── Base ── */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bronze) transparent;
+}
+
 body {
   background: var(--bg);
   color: var(--text-primary);
   font-family: var(--font-tenor), sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── Premium text selection ── */
+::selection {
+  background: rgba(184, 137, 42, 0.22);
+  color: var(--text-primary);
 }
 
 /* ── Custom Gold Scrollbar ── */
 ::-webkit-scrollbar {
-  width: 5px;
-  background: none;
+  width: 4px;
+  background: transparent;
 }
 ::-webkit-scrollbar-track {
-  background: none;
+  background: transparent;
   box-shadow: none;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--bronze);
+  background: linear-gradient(180deg, var(--bronze-light), var(--bronze));
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--bronze-light);
 }
 ::-webkit-scrollbar-corner {
-  background: none;
+  background: transparent;
 }
 
-/* Firefox */
-html {
-  scrollbar-width: thin;
-  scrollbar-color: var(--bronze) transparent;
+/* ── Smooth image rendering ── */
+img {
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* ── Premium link hover underline ── */
+.nav-link-premium {
+  position: relative;
+}
+.nav-link-premium::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1px;
+  background: var(--bronze);
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-link-premium:hover::after {
+  width: 100%;
+}
+
+/* ── Focus ring for accessibility ── */
+:focus-visible {
+  outline: 2px solid var(--bronze);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ── Smooth page transitions ── */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-slide-up {
+  animation: fadeSlideUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Bronze shimmer keyframe ── */
+@keyframes bronzeShimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.bronze-shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--bronze) 0%,
+    var(--bronze-light) 40%,
+    #E8C870 50%,
+    var(--bronze-light) 60%,
+    var(--bronze) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: bronzeShimmer 4s linear infinite;
+}
+
+/* ── Subtle section separator ── */
+.section-divider {
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--bronze), transparent);
+  margin: 0 auto;
 }

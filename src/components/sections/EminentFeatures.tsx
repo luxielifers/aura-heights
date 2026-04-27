@@ -76,23 +76,26 @@ export default function EminentFeatures() {
         return;
       }
 
-      const strips = gsap.utils.toArray(".distinction-strip", containerRef.current);
+      const strips = gsap.utils.toArray<HTMLElement>(".distinction-strip", containerRef.current);
 
-      gsap.fromTo(
-        strips,
-        { opacity: 0, y: 34 },
-        {
+      // Set initial hidden state immediately so strips are never visible before animation
+      gsap.set(strips, { opacity: 0, y: 40 });
+
+      // Animate each strip as it enters the viewport individually
+      strips.forEach((strip, i) => {
+        gsap.to(strip, {
           opacity: 1,
           y: 0,
-          duration: 0.65,
-          stagger: 0.08,
+          duration: 0.7,
+          delay: i * 0.06,
           ease: "power2.out",
           scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 92%",
+            trigger: strip,
+            start: "top 95%",
+            once: true,
           },
-        }
-      );
+        });
+      });
     }, containerRef);
 
     return () => {

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
+import { useLenis } from "lenis/react";
 import Preloader from "@/components/Preloader";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -26,18 +27,22 @@ let preloaderHasRun = false;
 export default function Home() {
   const [isPreloading, setIsPreloading] = useState(() => !preloaderHasRun);
 
-  // Prevent scroll while preloading
+  // Use Lenis to properly stop scroll during preloading —
+  // body.style.overflow conflicts with Lenis's scroll engine.
+  const lenis = useLenis();
+
   useEffect(() => {
+    if (!lenis) return;
     if (isPreloading) {
-      document.body.style.overflow = "hidden";
+      lenis.stop();
       window.scrollTo(0, 0);
     } else {
-      document.body.style.overflow = "";
+      lenis.start();
     }
     return () => {
-      document.body.style.overflow = "";
+      lenis.start();
     };
-  }, [isPreloading]);
+  }, [isPreloading, lenis]);
 
   const handlePreloaderComplete = useCallback(() => {
     preloaderHasRun = true;

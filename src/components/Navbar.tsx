@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { useLenis } from "lenis/react";
 
 function cn(...inputs: (string | undefined | null | false)[]) {
   return twMerge(clsx(inputs));
@@ -65,6 +66,7 @@ const navLinks: NavItem[] = [
 
 const BROCHURE_FILE = "/AuraHeights_Brochure.pdf";
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const FORMSPREE_BROCHURE = process.env.NEXT_PUBLIC_FORMSPREE_BROCHURE;
 
 export default function Navbar({ isPreloading = false }: { isPreloading?: boolean }) {
   const router = useRouter();
@@ -79,6 +81,25 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
     mobile: "",
   });
   const [menuImageSrc, setMenuImageSrc] = useState("/images/gallery/exterior/fullbuildingevening.jpg");
+  const [brochureSubmitting, setBrochureSubmitting] = useState(false);
+
+  // Use Lenis to properly stop/start smooth scroll when modals are open.
+  // Setting document.body.style.overflow = "hidden" conflicts with Lenis
+  // and causes scroll to stop working after modal close.
+  const lenis = useLenis();
+
+  useEffect(() => {
+    if (!lenis) return;
+    if (menuOpen || brochureModalOpen) {
+      lenis.stop();
+    } else {
+      lenis.start();
+    }
+    return () => {
+      // Always restore on unmount
+      lenis.start();
+    };
+  }, [menuOpen, brochureModalOpen, lenis]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -87,13 +108,6 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = menuOpen || brochureModalOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [menuOpen, brochureModalOpen]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -153,7 +167,7 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
     setBrochureError("");
   };
 
-  const handleBrochureSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleBrochureSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const cleanedName = brochureForm.name.trim();
@@ -175,6 +189,28 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
       return;
     }
 
+    // Submit to Formspree in the background (fire-and-forget)
+    if (FORMSPREE_BROCHURE && !FORMSPREE_BROCHURE.startsWith("REPLACE_")) {
+      setBrochureSubmitting(true);
+      try {
+        await fetch(`https://formspree.io/f/${FORMSPREE_BROCHURE}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            name: cleanedName,
+            email: cleanedEmail || undefined,
+            mobile: cleanedMobile,
+            _subject: "Brochure Download Request — Aura Heights",
+          }),
+        });
+      } catch {
+        // Silently fail — opening the brochure is more important
+      } finally {
+        setBrochureSubmitting(false);
+      }
+    }
+
+    // Open the brochure regardless of form submission result
     const brochureWindow = window.open(BROCHURE_FILE, "_blank", "noopener,noreferrer");
     if (!brochureWindow) {
       window.location.assign(BROCHURE_FILE);
@@ -182,11 +218,7 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
 
     setBrochureModalOpen(false);
     setBrochureError("");
-    setBrochureForm({
-      name: "",
-      email: "",
-      mobile: "",
-    });
+    setBrochureForm({ name: "", email: "", mobile: "" });
   };
 
   return (
@@ -230,14 +262,14 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
           </Link>
 
           {/* Right CTA */}
-          <div className="flex items-center gap-4 z-50 relative">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4 z-50 relative">
             <motion.button
               type="button"
               onClick={openBrochureModal}
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               className={cn(
-                "inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border px-4 sm:px-5 md:px-7 py-3.5 transition-colors",
+                "inline-flex items-center justify-center font-josefin uppercase text-[9px] sm:text-[10px] tracking-[0.15em] sm:tracking-[0.2em] rounded-full border px-3 sm:px-5 md:px-7 py-2.5 sm:py-3 md:py-3.5 transition-colors",
                 scrolled ? "border-bronze/70 text-bronze bg-bg/60 hover:bg-bronze hover:text-white" : "border-[#FAF7F2]/75 text-[#FAF7F2] bg-transparent hover:bg-[#FAF7F2] hover:text-primary"
               )}
             >
@@ -250,7 +282,7 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
               onClick={() => goToHref("/#contact")}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-bronze bg-bronze text-white px-4 sm:px-5 md:px-8 py-3.5 transition-shadow hover:shadow-[0_0_20px_rgba(184,137,42,0.4)]"
+              className="inline-flex items-center justify-center font-josefin uppercase text-[9px] sm:text-[10px] tracking-[0.15em] sm:tracking-[0.2em] rounded-full border border-bronze bg-bronze text-white px-3 sm:px-5 md:px-8 py-2.5 sm:py-3 md:py-3.5 transition-shadow hover:shadow-[0_0_20px_rgba(184,137,42,0.4)]"
             >
               <span className="sm:hidden">Contact</span>
               <span className="hidden sm:inline">Contact Us</span>
@@ -400,9 +432,10 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
                 <div className="pt-1 flex flex-col sm:flex-row gap-3">
                   <button
                     type="submit"
-                    className="inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-bronze bg-bronze text-white px-6 py-3.5 transition-shadow hover:shadow-[0_0_20px_rgba(184,137,42,0.4)]"
+                    disabled={brochureSubmitting}
+                    className="inline-flex items-center justify-center font-josefin uppercase text-[10px] tracking-[0.2em] rounded-full border border-bronze bg-bronze text-white px-6 py-3.5 transition-shadow hover:shadow-[0_0_20px_rgba(184,137,42,0.4)] disabled:opacity-60"
                   >
-                    Submit & Open Brochure
+                    {brochureSubmitting ? "Sending…" : "Submit & Open Brochure"}
                   </button>
                   <button
                     type="button"

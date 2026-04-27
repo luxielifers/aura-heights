@@ -47,15 +47,19 @@ export default function Intro() {
                 </p>
               </div>
 
-              <div className="mt-10 p-5 border border-marble bg-bg-secondary">
+              <div className="mt-10 p-5 border border-marble/70 bg-bg-secondary rounded-xl overflow-hidden">
                 <div className="flex items-center justify-between mb-3">
                   <p className="font-josefin text-[10px] uppercase tracking-[0.2em] text-muted">Project Timeline Progress</p>
                   <p className="font-josefin text-[10px] uppercase tracking-[0.2em] text-bronze">{progressPct}%</p>
                 </div>
-                <div className="h-2 bg-marble/80 overflow-hidden">
+                <div className="h-1.5 bg-marble/80 overflow-hidden rounded-full">
                   <div
-                    className="h-full bg-bronze transition-all duration-700"
-                    style={{ width: `${progressPct}%` }}
+                    className="h-full rounded-full transition-all duration-700 relative overflow-hidden"
+                    style={{
+                      width: `${progressPct}%`,
+                      background: "linear-gradient(90deg, #B8892A, #C9A04A, #DDB862, #C9A04A, #B8892A)",
+                      backgroundSize: "200% 100%",
+                    }}
                   />
                 </div>
                 <div className="mt-3 flex items-center justify-between font-josefin text-[10px] uppercase tracking-[0.16em] text-muted">

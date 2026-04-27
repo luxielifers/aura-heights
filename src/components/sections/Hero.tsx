@@ -94,10 +94,10 @@ export default function Hero({ isPreloading = false }: { isPreloading?: boolean 
         <div
           className="w-full max-w-4xl rounded-[2rem] md:rounded-[2.6rem] px-6 py-8 md:px-12 md:py-12 border border-[#FAF7F2]/40"
           style={{
-            background: "linear-gradient(132deg, rgba(250,247,242,0.48), rgba(240,235,227,0.25) 58%, rgba(250,247,242,0.14))",
-            backdropFilter: "blur(20px) saturate(118%)",
-            WebkitBackdropFilter: "blur(20px) saturate(118%)",
-            boxShadow: "0 20px 70px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -24px 44px rgba(232,224,213,0.24)",
+            background: "linear-gradient(135deg, rgba(250,247,242,0.52) 0%, rgba(240,235,227,0.28) 55%, rgba(250,247,242,0.16) 100%)",
+            backdropFilter: "blur(24px) saturate(130%)",
+            WebkitBackdropFilter: "blur(24px) saturate(130%)",
+            boxShadow: "0 30px 90px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 0 rgba(255,255,255,0.1), 0 0 0 1px rgba(184,137,42,0.1)",
           }}
         >
           <h1 className="font-cormorant font-light text-5xl md:text-7xl lg:text-8xl leading-tight mb-8">
@@ -140,14 +140,20 @@ export default function Hero({ isPreloading = false }: { isPreloading?: boolean 
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: baseDelay + 0.65 }}
           >
-            <button
+            <motion.button
               type="button"
               onClick={() => document.getElementById("residences")?.scrollIntoView({ behavior: "smooth" })}
-              className="inline-flex items-center font-josefin uppercase text-xs tracking-[0.2em] border border-bronze px-8 py-4 hover:bg-bronze hover:text-white transition-colors duration-300"
-              style={{ color: "var(--color-bronze)" }}
+              whileHover={{ scale: 1.03, boxShadow: "0 0 28px rgba(184,137,42,0.5)" }}
+              whileTap={{ scale: 0.97 }}
+              className="inline-flex items-center gap-3 font-josefin uppercase text-xs tracking-[0.25em] rounded-full border border-bronze px-10 py-4 text-bronze transition-all duration-300 hover:bg-bronze hover:text-white"
+              style={{
+                background: "linear-gradient(135deg, rgba(250,247,242,0.9), rgba(240,235,227,0.7))",
+                backdropFilter: "blur(8px)",
+              }}
             >
-              <span className="group-hover:text-white">Explore Residences →</span>
-            </button>
+              Explore Residences
+              <span className="text-bronze/70">→</span>
+            </motion.button>
           </motion.div>
         </div>
       </div>
