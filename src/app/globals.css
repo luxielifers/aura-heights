@@ -44,6 +44,7 @@
 html {
   scrollbar-width: thin;
   scrollbar-color: var(--bronze) transparent;
+  background: var(--bg);
 }
 
 body {
@@ -54,6 +55,34 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p,
+li {
+  text-wrap: pretty;
+}
+
+section {
+  scroll-margin-top: 96px;
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
 }
 
 /* ── Premium text selection ── */
@@ -156,4 +185,15 @@ img {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--bronze), transparent);
   margin: 0 auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
 }
