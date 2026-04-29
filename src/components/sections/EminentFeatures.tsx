@@ -200,7 +200,7 @@ export default function EminentFeatures() {
               Designed for Distinction
             </h2>
           </div>
-          <p className="max-w-md font-tenor text-[1rem] md:text-[1.08rem] leading-[1.85] text-[#EFE5D8]/72 lg:pb-2">
+          <p className="max-w-md font-manrope text-[1rem] md:text-[1.08rem] leading-[1.85] text-[#EFE5D8]/72 lg:pb-2">
             Signature specifications, daily comforts, and future-ready infrastructure come together with the calm precision of a private address.
           </p>
         </div>
@@ -229,10 +229,10 @@ export default function EminentFeatures() {
                 </p>
 
                 <div className="distinction-copy min-w-0 lg:border-l lg:border-[#C4A06033] lg:pl-8">
-                  <h3 className="font-tenor text-[1.82rem] md:text-[2.08rem] text-[#F8F1E6] leading-tight">
+                  <h3 className="font-manrope text-[1.82rem] md:text-[2.08rem] text-[#F8F1E6] leading-tight">
                     {item.title}
                   </h3>
-                  <p className="mt-2.5 font-tenor text-[1.02rem] md:text-[1.14rem] leading-[1.8] text-[#EFE5D8]/82 max-w-3xl">
+                  <p className="mt-2.5 font-manrope text-[1.02rem] md:text-[1.14rem] leading-[1.8] text-[#EFE5D8]/82 max-w-3xl">
                     {item.desc}
                   </p>
                 </div>

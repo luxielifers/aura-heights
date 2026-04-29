@@ -140,7 +140,7 @@ export default function Contact() {
                     value={formData.name}
                     onChange={e => setFormData({...formData, name: e.target.value})}
                     required
-                    className="w-full bg-transparent border-b border-marble py-4 font-tenor text-primary focus:outline-none focus:border-bronze transition-colors peer"
+                    className="w-full bg-transparent border-b border-marble py-4 font-manrope text-primary focus:outline-none focus:border-bronze transition-colors peer"
                     placeholder=" "
                   />
                   <label 
@@ -159,7 +159,7 @@ export default function Contact() {
                     value={formData.phone}
                     onChange={e => setFormData({...formData, phone: e.target.value})}
                     required
-                    className="w-full bg-transparent border-b border-marble py-4 font-tenor text-primary focus:outline-none focus:border-bronze transition-colors peer"
+                    className="w-full bg-transparent border-b border-marble py-4 font-manrope text-primary focus:outline-none focus:border-bronze transition-colors peer"
                     placeholder=" "
                   />
                   <label 
@@ -179,7 +179,7 @@ export default function Contact() {
                   aria-haspopup="listbox"
                   aria-expanded={unitMenuOpen}
                   onClick={() => setUnitMenuOpen((prev) => !prev)}
-                  className="w-full bg-transparent border-b border-marble pt-8 pb-3 pr-9 text-left font-tenor text-primary focus:outline-none focus:border-bronze transition-all duration-300"
+                  className="w-full bg-transparent border-b border-marble pt-8 pb-3 pr-9 text-left font-manrope text-primary focus:outline-none focus:border-bronze transition-all duration-300"
                 >
                   <span className={formData.unit ? "text-primary" : "text-muted/75"}>
                     {formData.unit || "Select your preferred residence"}
@@ -263,7 +263,7 @@ export default function Contact() {
                   name="message" 
                   value={formData.message}
                   onChange={e => setFormData({...formData, message: e.target.value})}
-                  className="w-full bg-transparent border-b border-marble py-4 font-tenor text-primary focus:outline-none focus:border-bronze transition-colors peer resize-none h-32"
+                  className="w-full bg-transparent border-b border-marble py-4 font-manrope text-primary focus:outline-none focus:border-bronze transition-colors peer resize-none h-32"
                   placeholder=" "
                 ></textarea>
                 <label 
@@ -285,7 +285,7 @@ export default function Contact() {
               </motion.button>
 
               {submitNotice ? (
-                <p className={`font-tenor text-sm ${submitStatus === "success" ? "text-[#4A7C59]" : submitStatus === "error" ? "text-[#A84332]" : "text-muted"}`}>
+                <p className={`font-manrope text-sm ${submitStatus === "success" ? "text-[#4A7C59]" : submitStatus === "error" ? "text-[#A84332]" : "text-muted"}`}>
                   {submitNotice}
                 </p>
               ) : null}
@@ -310,7 +310,7 @@ export default function Contact() {
                 <Phone size={24} strokeWidth={1.5} />
                 <h3 className="font-cormorant text-2xl text-primary">Direct Call</h3>
               </div>
-              <p className="font-tenor text-muted mb-2">Speak to our sales director directly.</p>
+              <p className="font-manrope text-muted mb-2">Speak to our sales director directly.</p>
               <p className="font-josefin text-lg tracking-widest text-primary">
                 {PHONE_DISPLAY}
               </p>
@@ -333,7 +333,7 @@ export default function Contact() {
                 <MessageCircle size={24} strokeWidth={1.5} />
                 <h3 className="font-cormorant text-2xl text-primary">WhatsApp</h3>
               </div>
-              <p className="font-tenor text-muted mb-2">Get brochure & floor plans instantly.</p>
+              <p className="font-manrope text-muted mb-2">Get brochure & floor plans instantly.</p>
               <p className="font-josefin text-lg tracking-widest text-primary">
                 Message Us
               </p>

@@ -118,7 +118,7 @@ function GlassCard({ listRef, inView }: { listRef?: React.RefObject<HTMLDivEleme
                 >
                   <span className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-bronze shadow-[0_0_6px_rgba(184,137,42,0.5)]" />
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                    <span className="font-tenor text-base md:text-lg text-primary [text-shadow:0_1px_6px_rgba(0,0,0,0.2)]">{item.name}</span>
+                    <span className="font-manrope text-base md:text-lg text-primary [text-shadow:0_1px_6px_rgba(0,0,0,0.2)]">{item.name}</span>
 
                     <div className="flex items-center gap-2 self-start sm:self-auto">
                       <span
@@ -208,7 +208,7 @@ export default function Location() {
       <p className="font-josefin text-[10px] uppercase tracking-[0.22em] text-bronze mb-3">
         Interactive Map Disabled
       </p>
-      <p className="font-tenor text-primary max-w-md leading-relaxed">
+      <p className="font-manrope text-primary max-w-md leading-relaxed">
         Accept optional cookies to enable the live Mapbox experience.
       </p>
       <button

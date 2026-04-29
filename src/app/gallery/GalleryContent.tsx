@@ -121,7 +121,7 @@ export function GalleryContent() {
             )}
           </h1>
           {isLayoutsTab && (
-            <p className="mt-3 font-tenor text-muted max-w-xl leading-relaxed">
+            <p className="mt-3 font-manrope text-muted max-w-xl leading-relaxed">
               Grouped by residence pair: 2BHK L1 - R1, 3BHK L3 - R3, and 3BHK+ L2 - R2, with Sun and Site maps in a dedicated section.
             </p>
           )}

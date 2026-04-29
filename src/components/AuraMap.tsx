@@ -6,7 +6,7 @@ export default function AuraMap() {
   if (!token) {
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-bg text-center px-6">
-        <p className="font-tenor text-primary/75 leading-relaxed max-w-sm">
+        <p className="font-manrope text-primary/75 leading-relaxed max-w-sm">
           Map preview is unavailable right now.
         </p>
       </div>

@@ -121,7 +121,7 @@ export default function Hero({ isPreloading = false }: { isPreloading?: boolean 
               </div>
           </h1>
 
-          <div className="mb-12 font-tenor text-base md:text-lg text-white/84 max-w-md mx-auto">
+          <div className="mb-12 font-manrope font-light tracking-wide text-base md:text-lg text-white/84 max-w-md mx-auto">
             {subLines.map((line, i) => (
               <div key={i} className="overflow-hidden">
                 <motion.div

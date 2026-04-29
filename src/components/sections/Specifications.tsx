@@ -245,7 +245,7 @@ export default function Specifications() {
         <div className="mb-14 md:mb-16">
           <p className="font-josefin text-[10px] uppercase tracking-[0.24em] text-muted mb-3">Specifications</p>
           <h2 className="font-cormorant text-5xl md:text-7xl text-primary leading-[0.95]">Crafted in Detail</h2>
-          <p className="mt-5 max-w-3xl font-tenor text-base md:text-[1.08rem] text-primary/78 leading-[1.85]">
+          <p className="mt-5 max-w-3xl font-manrope text-base md:text-[1.08rem] text-primary/78 leading-[1.85]">
             Every element at Aura Heights reflects a commitment to excellence.
           </p>
         </div>
@@ -285,7 +285,7 @@ export default function Specifications() {
                       >
                         <div className="flex items-center gap-4">
                           <SpecIcon name={row.icon} />
-                          <span className="font-tenor text-[18px] md:text-[20px] text-primary/90">{row.title}</span>
+                          <span className="font-manrope text-[18px] md:text-[20px] text-primary/90">{row.title}</span>
                         </div>
 
                         <motion.span
@@ -322,7 +322,7 @@ export default function Specifications() {
                         >
                           <ul className="pl-2 md:pl-8 space-y-3">
                             {row.points.map((point) => (
-                              <li key={point} className="flex items-start gap-3 font-tenor text-[15px] md:text-[16px] leading-8 text-primary/88">
+                              <li key={point} className="flex items-start gap-3 font-manrope text-[15px] md:text-[16px] leading-8 text-primary/88">
                                 <span className="mt-2.5 h-1 w-1 rounded-full bg-[#B8892A] flex-shrink-0" />
                                 <span>{point}</span>
                               </li>

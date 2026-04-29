@@ -35,6 +35,22 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
+
+    const handleRefresh = () => {
+      ScrollTrigger.refresh();
+    };
+
+    window.addEventListener("load", handleRefresh);
+    
+    const resizeObserver = new ResizeObserver(() => {
+      ScrollTrigger.refresh();
+    });
+    resizeObserver.observe(document.body);
+
+    return () => {
+      window.removeEventListener("load", handleRefresh);
+      resizeObserver.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -88,7 +104,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                 boxShadow: "0 14px 38px rgba(0,0,0,0.18)",
               }}
             >
-              <p className="font-tenor text-sm md:text-[15px] text-primary/90 leading-relaxed">
+              <p className="font-manrope text-sm md:text-[15px] text-primary/90 leading-relaxed">
                 We use optional cookies to enable Vimeo videos and the interactive location map.
                 You can continue with essential-only mode, or accept optional cookies for the full experience.
               </p>

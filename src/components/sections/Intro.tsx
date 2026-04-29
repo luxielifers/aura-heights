@@ -35,7 +35,7 @@ export default function Intro() {
               </h2>
               
               {/* Extra content to lean into Dehradun elevation / mountain air */}
-              <div className="space-y-6 font-tenor text-muted leading-relaxed text-lg">
+              <div className="space-y-6 font-manrope text-muted leading-relaxed text-lg">
                 <p>
                   Tucked into the prestigious Rajpur Road neighbourhood, Aura Heights brings together Dehradun&apos;s heritage character and contemporary residential calm.
                 </p>

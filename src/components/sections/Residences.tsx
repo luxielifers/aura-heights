@@ -130,11 +130,11 @@ export default function Residences() {
                 <h3 className="font-cormorant text-3xl md:text-4xl text-primary mb-4">
                   {currentTab.title}
                 </h3>
-                <p className="font-tenor text-muted uppercase tracking-widest text-sm mb-8">
+                <p className="font-manrope text-muted uppercase tracking-widest text-sm mb-8">
                   {currentTab.sqft} SQ.FT.
                 </p>
 
-                <ul className="mb-12 space-y-4 font-tenor text-primary">
+                <ul className="mb-12 space-y-4 font-manrope text-primary">
                   {currentTab.features.map((feat, i) => (
                     <li key={i} className="flex items-center gap-4">
                       <span className="w-1.5 h-1.5 rounded-full bg-bronze block"></span>

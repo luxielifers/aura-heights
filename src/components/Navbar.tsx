@@ -354,7 +354,7 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
                   <h3 className="font-cormorant text-3xl sm:text-4xl text-primary leading-tight">
                     Share your details
                   </h3>
-                  <p className="mt-2 font-tenor text-sm text-muted">
+                  <p className="mt-2 font-manrope text-sm text-muted">
                     Enter your name and mobile number. Email is optional.
                   </p>
                 </div>
@@ -380,7 +380,7 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
                       setBrochureError("");
                       setBrochureForm((prev) => ({ ...prev, name: event.target.value }));
                     }}
-                    className="w-full rounded-xl border border-marble bg-bg-secondary px-4 py-3 font-tenor text-primary placeholder:text-muted/70 focus:outline-none focus:border-bronze"
+                    className="w-full rounded-xl border border-marble bg-bg-secondary px-4 py-3 font-manrope text-primary placeholder:text-muted/70 focus:outline-none focus:border-bronze"
                     placeholder="Enter your full name"
                     required
                   />
@@ -398,7 +398,7 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
                       setBrochureError("");
                       setBrochureForm((prev) => ({ ...prev, email: event.target.value }));
                     }}
-                    className="w-full rounded-xl border border-marble bg-bg-secondary px-4 py-3 font-tenor text-primary placeholder:text-muted/70 focus:outline-none focus:border-bronze"
+                    className="w-full rounded-xl border border-marble bg-bg-secondary px-4 py-3 font-manrope text-primary placeholder:text-muted/70 focus:outline-none focus:border-bronze"
                     placeholder="name@example.com"
                   />
                 </div>
@@ -419,14 +419,14 @@ export default function Navbar({ isPreloading = false }: { isPreloading?: boolea
                         mobile: event.target.value.replace(/\D/g, "").slice(0, 10),
                       }));
                     }}
-                    className="w-full rounded-xl border border-marble bg-bg-secondary px-4 py-3 font-tenor text-primary placeholder:text-muted/70 focus:outline-none focus:border-bronze"
+                    className="w-full rounded-xl border border-marble bg-bg-secondary px-4 py-3 font-manrope text-primary placeholder:text-muted/70 focus:outline-none focus:border-bronze"
                     placeholder="10-digit mobile number"
                     required
                   />
                 </div>
 
                 {brochureError ? (
-                  <p className="font-tenor text-sm text-[#A84332]">{brochureError}</p>
+                  <p className="font-manrope text-sm text-[#A84332]">{brochureError}</p>
                 ) : null}
 
                 <div className="pt-1 flex flex-col sm:flex-row gap-3">

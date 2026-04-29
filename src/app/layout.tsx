@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Tenor_Sans, Josefin_Sans } from "next/font/google";
+import { Cormorant_Garamond, Manrope, Josefin_Sans } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/providers";
 
@@ -9,10 +9,10 @@ const cormorant = Cormorant_Garamond({
   weight: ["300", "400", "500", "600", "700"],
 });
 
-const tenor = Tenor_Sans({
-  variable: "--font-tenor",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["300", "400", "500", "600"],
 });
 
 const josefin = Josefin_Sans({
@@ -46,9 +46,10 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${cormorant.variable} ${tenor.variable} ${josefin.variable} h-full antialiased`}
+      className={`${cormorant.variable} ${manrope.variable} ${josefin.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg text-primary">
+        <div className="noise-overlay" aria-hidden="true" />
         <Providers>{children}</Providers>
       </body>
     </html>

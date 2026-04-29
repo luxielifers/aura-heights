@@ -100,7 +100,7 @@ export default function Footer() {
             <p className="font-josefin text-[10px] uppercase tracking-[0.26em] text-[#DDB862]">
               Where Elevation Meets Elegance
             </p>
-            <p className="mt-4 flex max-w-xs items-start justify-center gap-2 font-tenor text-sm leading-relaxed text-[#BDB0A0] lg:justify-start">
+            <p className="mt-4 flex max-w-xs items-start justify-center gap-2 font-manrope text-sm leading-relaxed text-[#BDB0A0] lg:justify-start">
               <MapPin size={15} className="mt-1 shrink-0 text-[#B8892A]" strokeWidth={1.5} />
               <span>Rajpur Road, Dehradun - Uttarakhand, India</span>
             </p>
